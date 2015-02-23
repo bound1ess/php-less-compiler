@@ -26,10 +26,15 @@ class Node {
     }
 
     /**
+     * @param string|integer|null $key
      * @return mixed
      */
-    public function getValue()
+    public function getValue($key = null)
     {
+        if ( ! is_null($key)) {
+            return $this->value[$key];
+        }
+
         return $this->value;
     }
 

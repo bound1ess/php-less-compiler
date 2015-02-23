@@ -17,6 +17,12 @@ class NodeTest extends \TestCase {
         $this->sut->setValue("foobar");
 
         expect($this->sut->getValue())->to_be_equal_to("foobar");
+
+        $this->sut->setValue([
+            "foo" => "bar",
+        ]);
+
+        expect($this->sut->getValue("foo"))->to_be_equal_to("bar");
     }
 
 }
