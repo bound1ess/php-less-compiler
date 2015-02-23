@@ -12,6 +12,8 @@ class CompilerTest extends \TestCase {
      */
     public function it_compiles_AST()
     {
-        expect($this->sut)->to_respond_to("compileTree");
+        $ast = \Mockery::mock("LessCompiler\\AbstractSyntaxTree");
+
+        expect($this->sut->compileTree($ast))->to_be_of_type("string");
     }
 }
