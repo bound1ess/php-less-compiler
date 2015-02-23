@@ -12,5 +12,11 @@
         "psr-4": {
             "LessCompiler\\": "src/LessCompiler"
         }
+    },
+
+    "autoload-dev": {
+        "files": [
+            "tests/TestCase.php"
+        ]
     }
 }

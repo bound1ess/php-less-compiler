@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<phpunit colors="true">
+    <testsuites>
+        <testsuite name="LessCompiler test suite">
+            <directory>tests/LessCompiler</directory>
+        </testsuite>
+    </testsuites>
+    <filter>
+        <whitelist>
+            <directory>src/LessCompiler</directory>
+        </whitelist>
+        <blacklist>
+            <directory>vendor</directory>
+        </blacklist>
+    </filter>
+</phpunit>
+<!--
+vim: syntax=xml
+-->
