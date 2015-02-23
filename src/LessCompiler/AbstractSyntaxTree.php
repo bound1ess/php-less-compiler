@@ -1,6 +1,6 @@
 <?php namespace LessCompiler;
 
-class AbstractSyntaxTree {
+class AbstractSyntaxTree implements \IteratorAggregate {
 
     /**
      * @var array
@@ -42,6 +42,14 @@ class AbstractSyntaxTree {
     public function getNodes()
     {
         return $this->nodes;
+    }
+
+    /**
+     * @return \ArrayIterator
+     */
+    public function getIterator()
+    {
+        return new \ArrayIterator($this->nodes);
     }
 
 }

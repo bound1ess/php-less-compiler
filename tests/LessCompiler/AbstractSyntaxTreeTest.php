@@ -24,6 +24,15 @@ class AbstractSyntaxTreeTest extends \TestCase {
     }
 
     /**
+     * @test
+     */
+    public function it_is_traversable()
+    {
+        expect($this->sut instanceof \Traversable)->to_be_true();
+        expect($this->sut->getIterator())->to_be_an("ArrayIterator");
+    }
+
+    /**
      * @return object
      */
     protected function createNodeMock()
