@@ -18,4 +18,17 @@ class TestCase extends Essence\Extensions\PhpunitExtension {
             $this->sut = new $this->sut;
         }
     }
+
+    /**
+     * @param string $representation
+     * @return object
+     */
+    protected function mockSelector($representation)
+    {
+        $selector = \Mockery::mock("LessCompiler\\Css\\Selectors\\Selector");
+
+        $selector->shouldReceive("represent")->once()->andReturn($representation);
+
+        return $selector;
+    }
 }

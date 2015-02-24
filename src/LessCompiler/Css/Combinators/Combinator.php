@@ -31,7 +31,7 @@ abstract class Combinator extends \LessCompiler\Node {
     public function combine()
     {
         return sprintf(
-            "%s %s %s",
+            "%s%s%s",
             $this->value["one"]->represent(),
             $this->represent(),
             $this->value["another"]->represent()
