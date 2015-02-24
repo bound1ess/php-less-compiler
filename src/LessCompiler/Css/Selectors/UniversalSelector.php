@@ -1,7 +1,7 @@
 <?php namespace LessCompiler\Css\Selectors;
 
 /**
- * This selector affects ALL elements on a page.
+ * This selector selects ALL elements on a page.
  */
 class UniversalSelector extends Selector {
 
