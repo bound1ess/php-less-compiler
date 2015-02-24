@@ -1,5 +1,8 @@
 <?php namespace LessCompiler;
 
+/**
+ * An AST node.
+ */
 class Node {
 
     /**

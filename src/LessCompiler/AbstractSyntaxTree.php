@@ -1,5 +1,8 @@
 <?php namespace LessCompiler;
 
+/**
+ * A traversable AST.
+ */
 class AbstractSyntaxTree implements \IteratorAggregate {
 
     /**
