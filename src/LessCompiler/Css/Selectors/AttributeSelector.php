@@ -6,6 +6,19 @@
 class AttributeSelector extends Selector {
 
     /**
+     * @param string $name
+     * @param string|null $value
+     * @return AttributeSelector
+     */
+    public function __construct($name, $value = null)
+    {
+        parent::__construct([
+            "attribute_name"  => $name,
+            "attribute_value" => $value,
+        ]);
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function represent()

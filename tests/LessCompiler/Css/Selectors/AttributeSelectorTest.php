@@ -7,19 +7,10 @@ class AttributeSelectorTest extends \TestCase {
      */
     public function it_returns_a_string_representation()
     {
-        $selector = new AttributeSelector([
-            "attribute_name"  => "foobar",
-            "attribute_value" => null,
-        ]);
+        expect((new AttributeSelector("foobar"))->represent())->to_be_equal_to("[foobar]");
 
-        expect($selector->represent())->to_be_equal_to("[foobar]");
-
-        $selector->setValue([
-            "attribute_name"  => "foo",
-            "attribute_value" => "bar",
-        ]);
-
-        expect($selector->represent())->to_be_equal_to("[foo=\"bar\"]");
+        expect((new AttributeSelector("foo", "bar"))->represent())
+            ->to_be_equal_to("[foo=\"bar\"]");
     }
 
 }
