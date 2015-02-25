@@ -33,7 +33,7 @@ class StandardPrinterTest extends \TestCase {
         ]);
 
         expect((new StandardPrinter)->printTree($tree))
-            ->to_be_equal_to(file_get_contents(__DIR__ . "/../../../printer-output.example"));
+            ->to_include(file_get_contents(__DIR__ . "/../../../printer-output.example"));
     }
 
 }
