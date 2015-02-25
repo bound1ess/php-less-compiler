@@ -6,6 +6,19 @@
 class ImportStatement extends \LessCompiler\Node {
 
     /**
+     * @var array
+     */
+    protected $modes = [
+        "less",
+        "css",
+        "reference",
+        "inline",
+        "optional",
+        "once",
+        "multiple",
+    ];
+
+    /**
      * @param string $file
      * @param string|null $mode
      * @return ImportStatement
@@ -42,6 +55,21 @@ class ImportStatement extends \LessCompiler\Node {
         }
 
         return $this->guessMode();
+    }
+
+    /**
+     * @return string
+     */
+    protected function guessMode()
+    {
+        $extension = explode(".", $this->value["file"]);
+        $extension = end($extension);
+
+        if (in_array($extension, $this->modes)) {
+            return $extension;
+        }
+
+        return "less";
     }
 
 }
