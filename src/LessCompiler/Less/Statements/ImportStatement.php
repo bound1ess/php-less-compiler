@@ -38,11 +38,11 @@ class ImportStatement extends \LessCompiler\Node {
     {
         $file = $this->value["file"];
 
-        if ($fullPath = file_exists(getcwd()."/{$file}")) {
-            return $fullPath;
+        if (strpos($file, "/") === 0) {
+            return $file;
         }
 
-        return $file;
+        return sprintf("%s/%s", getcwd(), $file);
     }
 
     /**
