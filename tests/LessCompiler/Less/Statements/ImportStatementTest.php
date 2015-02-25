@@ -17,6 +17,7 @@ class ImportStatementTest extends \TestCase {
     public function it_returns_import_mode()
     {
         expect((new ImportStatement("foo.css"))->getMode())->to_be_equal_to("css");
+        expect((new ImportStatement("foo"))->getMode())->to_be_equal_to("less");
         expect((new ImportStatement("foo", "once"))->getMode())->to_be_equal_to("once");
     }
 
