@@ -20,4 +20,19 @@ class ParserTest extends \TestCase {
             ->to_have_length(0);
     }
 
+    /**
+     * @test
+     */
+    public function it_parses_an_import_statement()
+    {
+        $tree = $this->sut->parse("@import 'something.css' // comment");
+
+        expect($tree->getNodes())->to_have_length(1);
+        expect($node = $tree->getFirstNode())
+            ->to_be_a("LessCompiler\\Less\\Statements\\ImportStatement");
+
+        expect($node->getValue("file"))->to_be_equal_to(getcwd() . "/something.css");
+        expect($node->getValue("mode"))->to_be_equal_to("css");
+    }
+
 }

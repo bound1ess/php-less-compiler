@@ -48,6 +48,14 @@ class AbstractSyntaxTree implements \IteratorAggregate {
     }
 
     /**
+     * @return mixed
+     */
+    public function getFirstNode()
+    {
+        return $this->nodes[0];
+    }
+
+    /**
      * @return \ArrayIterator
      */
     public function getIterator()
