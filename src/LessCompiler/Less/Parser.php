@@ -21,6 +21,8 @@ class Parser {
         $tree = new LessTree;
 
         while ( ! $this->queue->isEmpty()) {
+            $line = $this->readLine();
+
             // @do whatever
         }
 
@@ -48,7 +50,7 @@ class Parser {
     {
         try {
             return $this->queue->dequeue();
-        } catch(Exceptions\ParseException $exception) {
+        } catch(\RuntimeException $exception) {
             // @todo
             throw new Exceptions\ParseException($exception->getMessage());
         }
