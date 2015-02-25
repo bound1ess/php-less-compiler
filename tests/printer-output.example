@@ -1,0 +1,4 @@
+#foo > .fizz[bar="baz"] {
+    color: white;
+    font-size: 18px;
+}
