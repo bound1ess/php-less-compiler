@@ -31,8 +31,8 @@ class ParserTest extends \TestCase {
         expect($node = $tree->getFirstNode())
             ->to_be_a("LessCompiler\\Less\\Statements\\ImportStatement");
 
-        expect($node->getValue("file"))->to_be_equal_to(getcwd() . "/something.css");
-        expect($node->getValue("mode"))->to_be_equal_to("css");
+        expect($node->getFullFilePath())->to_be_equal_to(getcwd() . "/something.css");
+        expect($node->getMode())->to_be_equal_to("css");
     }
 
 }
