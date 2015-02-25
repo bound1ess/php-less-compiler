@@ -6,10 +6,10 @@
 class Compiler {
 
     /**
-     * @param AbstractSyntaxTree $tree
+     * @param \LessCompiler\Less\LessTree $tree
      * @return string
      */
-    public function compileTree(AbstractSyntaxTree $tree)
+    public function compileTree(Less\LessTree $tree)
     {
         return "foobar"; // @todo
     }

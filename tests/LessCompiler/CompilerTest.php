@@ -12,7 +12,7 @@ class CompilerTest extends \TestCase {
      */
     public function it_compiles_AST()
     {
-        $ast = \Mockery::mock("LessCompiler\\AbstractSyntaxTree");
+        $ast = \Mockery::mock("LessCompiler\\Less\\LessTree");
 
         expect($this->sut->compileTree($ast))->to_be_of_type("string");
     }
