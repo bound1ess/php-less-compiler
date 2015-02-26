@@ -33,6 +33,11 @@ class ParserTest extends \TestCase {
 
         expect($node->getFullFilePath())->to_be_equal_to(getcwd() . "/something.css");
         expect($node->getMode())->to_be_equal_to("css");
+
+        // 2nd case:
+        $tree = $this->sut->parse("@import /* hey */ \"main.less\"");
+
+        expect($tree->getNodes())->to_have_length(1);
     }
 
 }

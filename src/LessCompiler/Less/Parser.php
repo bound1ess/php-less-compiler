@@ -57,7 +57,13 @@ class Parser {
             );
         }
 
-        return new Statements\ImportStatement($file, $mode);
+        if ( ! preg_match("/^@import (?P<file>.+)$/", $line, $info)) {
+            return null;
+        }
+
+        return new Statements\ImportStatement(
+            preg_replace("/[\'\"]+/", "", $info["file"])
+        );
     }
 
     /**
