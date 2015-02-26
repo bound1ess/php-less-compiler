@@ -86,7 +86,7 @@ class Parser {
 
             $container->addProperties($properties);
 
-            var_dump($properties);exit;
+            // var_dump($properties);exit;
         }
 
         return $container;

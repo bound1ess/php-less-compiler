@@ -60,6 +60,12 @@ class ParserTest extends \TestCase {
     public function it_parses_a_rule()
     {
         $tree = $this->sut->parse("#container > .item { foo: bar; baz: fizz; }");
+
+        expect($properties = $tree->getFirstNode()->getValue("properties"))
+            ->to_have_length(2);
+
+        expect($properties[0]->getValue("name"))->to_be_equal_to("foo");
+        expect($properties[1]->getValue("value"))->to_be_equal_to("fizz");
     }
 
 }
