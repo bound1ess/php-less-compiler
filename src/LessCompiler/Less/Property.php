@@ -3,7 +3,7 @@
 /**
  * A LESS property.
  */
-class Property extends \LessCompiler\Node {
+class Property extends \LessCompiler\Property {
 
     /**
      * @param string $name
@@ -12,7 +12,7 @@ class Property extends \LessCompiler\Node {
      */
     public function __construct($name, $value)
     {
-        parent::__construct(compact ("name", "value"));
+        $this->value = compact ("name", "value");
     }
 
 }

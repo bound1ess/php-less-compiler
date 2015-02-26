@@ -3,7 +3,7 @@
 /**
  * A CSS property.
  */
-class Property extends \LessCompiler\Node {
+class Property extends \LessCompiler\Property {
 
     /**
      * @param string $name

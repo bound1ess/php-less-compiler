@@ -34,10 +34,10 @@ class Container extends \LessCompiler\Node {
     }
 
     /**
-     * @param \LessCompiler\Css\Property $property
+     * @param \LessCompiler\Property $property
      * @return void
      */
-    public function addProperty(Property $property)
+    public function addProperty(\LessCompiler\Property $property)
     {
         $this->value["properties"][] = $property;
     }
