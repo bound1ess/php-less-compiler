@@ -50,11 +50,12 @@ class Parser {
     {
         $info = [];
 
-        if ( ! preg_match("/^@import (?P<file>.+)$/", $line, $info)) {
-            return null;
+        if (preg_match("/^@import (?P<mode>\(\w+\)) (?P<file>.+)$/", $line, $info)) {
+            return new Statements\ImportStatement(
+                preg_replace("/[\'\"]+/", "", $info["file"]),
+                preg_replace("/[\(\)]{1}/", "", $info["mode"])
+            );
         }
-
-        var_dump($info);exit;
 
         return new Statements\ImportStatement($file, $mode);
     }
