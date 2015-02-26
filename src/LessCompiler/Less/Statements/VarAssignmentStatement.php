@@ -7,7 +7,7 @@ class VarAssignmentStatement extends \LessCompiler\Node {
 
     /**
      * @param string $name
-     * @param mixed $value
+     * @param string $value
      * @return VarAssignmentStatement
      */
     public function __construct($name, $value)
