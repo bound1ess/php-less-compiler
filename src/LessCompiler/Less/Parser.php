@@ -56,11 +56,11 @@ class Parser {
     {
         $info = [];
 
-        if ( ! preg_match("/^@(?P<name>\w+):(?P<value>.+)$/", trim($line), $info)) {
+        if ( ! preg_match("/^@(?P<name>\w+):(?P<value>.+);$/", trim($line), $info)) {
             return null;
         }
 
-        return new VarAssignment(
+        return new Statements\VarAssignmentStatement(
             $info["name"],
             trim($info["value"])
         );
@@ -77,7 +77,7 @@ class Parser {
         if (preg_match("/^@import (?P<mode>\(\w+\)) (?P<file>.+)$/", $line, $info)) {
             return new Statements\ImportStatement(
                 preg_replace("/[\'\"]+/", "", $info["file"]),
-                preg_replace("/[\(\)]{1}/", "", $info["mode"])
+                trim(preg_replace("/[\(\)]{1}/", "", $info["mode"]))
             );
         }
 
@@ -86,7 +86,7 @@ class Parser {
         }
 
         return new Statements\ImportStatement(
-            preg_replace("/[\'\"]+/", "", $info["file"])
+            trim(preg_replace("/[\'\"]+/", "", $info["file"]))
         );
     }
 

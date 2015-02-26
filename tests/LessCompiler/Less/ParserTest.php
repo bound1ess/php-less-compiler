@@ -40,4 +40,18 @@ class ParserTest extends \TestCase {
         expect($tree->getNodes())->to_have_length(1);
     }
 
+    /**
+     * @test
+     */
+    public function it_parses_a_variable_assignment()
+    {
+        $tree = $this->sut->parse("    @foo:  123  ;");
+
+        expect($node = $tree->getFirstNode())
+            ->to_be_a("LessCompiler\\Less\\Statements\\VarAssignmentStatement");
+
+        expect($node->getValue("name"))->to_be_equal_to("foo");
+        expect($node->getValue("value"))->to_be_equal_to("123");
+    }
+
 }

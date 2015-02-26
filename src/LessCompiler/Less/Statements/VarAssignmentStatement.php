@@ -3,7 +3,7 @@
 /**
  * A LESS variable.
  */
-class VarAssignmentStatement \LessCompiler\Node {
+class VarAssignmentStatement extends \LessCompiler\Node {
 
     /**
      * @param string $name
