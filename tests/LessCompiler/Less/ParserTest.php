@@ -25,7 +25,7 @@ class ParserTest extends \TestCase {
      */
     public function it_parses_an_import_statement()
     {
-        $tree = $this->sut->parse("@import 'something.css' // comment");
+        $tree = $this->sut->parse("@import (css) 'something.css' // comment");
 
         expect($tree->getNodes())->to_have_length(1);
         expect($node = $tree->getFirstNode())

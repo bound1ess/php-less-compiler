@@ -11,6 +11,11 @@ class Parser {
     protected $queue;
 
     /**
+     * @var boolean
+     */
+    protected $inComment = false;
+
+    /**
      * @param string $code
      * @return \LessCompiler\Less\LessTree
      */
@@ -21,12 +26,71 @@ class Parser {
         $tree = new LessTree;
 
         while ( ! $this->queue->isEmpty()) {
-            $line = $this->readLine();
+            if ($this->isComment($line = $this->readLine())) {
+                continue;
+            }
 
-            // @do whatever
+            if (strlen($line = $this->removeComments($line)) === 0) {
+                continue;
+            }
+
+            if ( ! is_null($statement = $this->detectImportStatement($line))) {
+                $tree->addNode($statement);
+            }
         }
 
         return $tree;
+    }
+
+    /**
+     * @param string $line
+     * @return \LessCompiler\Less\Statements\ImportStatement|null
+     */
+    protected function detectImportStatement($line)
+    {
+        $info = [];
+
+        if ( ! preg_match("/^@import (?P<file>.+)$/", $line, $info)) {
+            return null;
+        }
+
+        var_dump($info);exit;
+
+        return new Statements\ImportStatement($file, $mode);
+    }
+
+    /**
+     * @param string $line
+     * @return boolean
+     */
+    protected function isComment($line)
+    {
+        $line = trim($line);
+
+        if (strpos($line, "/*") === 0) {
+            $this->inComment = true;
+        }
+
+        if (strpos(strrev($line), "/*") === 0) {
+            $this->inComment = false;
+
+            return true;
+        }
+
+        return $this->inComment;
+    }
+
+    /**
+     * @param string $line
+     * @return string
+     */
+    protected function removeComments($line)
+    {
+        // Remove // comments.
+        $line = preg_replace("/\/\/.+$/", "", $line);
+
+        // As well as /* ... */ one-liners.
+        return trim(preg_replace("/\/\*.+\*\//", "", $line));
     }
 
     /**
