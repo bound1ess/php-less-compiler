@@ -54,4 +54,12 @@ class ParserTest extends \TestCase {
         expect($node->getValue("value"))->to_be_equal_to("123");
     }
 
+    /**
+     * @test
+     */
+    public function it_parses_a_rule()
+    {
+        $tree = $this->sut->parse("#container > .item { foo: bar; baz: fizz; }");
+    }
+
 }

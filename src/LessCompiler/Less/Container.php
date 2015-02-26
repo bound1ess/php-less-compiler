@@ -14,7 +14,7 @@ class Container extends \LessCompiler\Css\Container {
      */
     public function __construct(Query $query, array $properties = [], array $children = [])
     {
-        parent::__construct(compact ("query", "properties", "children"));
+        $this->value = compact ("query", "properties", "children");
     }
 
     /**

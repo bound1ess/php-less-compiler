@@ -43,9 +43,53 @@ class Parser {
             if ( ! is_null($assignment = $this->detectVariableAssignment($line))) {
                 $tree->addNode($assignment);
             }
+
+            // Rules.
+            if ( ! is_null($rule = $this->detectRule($line))) {
+                $tree->addNode($rule);
+            }
         }
 
         return $tree;
+    }
+
+    /**
+     * @param string $line
+     * @return null|\LessCompiler\Less\Container
+     */
+    protected function detectRule($line)
+    {
+        $info = [];
+
+        if ( ! preg_match("/^(?P<query>.+)\{/", trim($line), $info)) {
+            return null;
+        }
+
+        $container = new Container(
+            new Query(/* @todo */)
+        );
+
+        if (count($elements = array_filter(explode("{", trim($line)))) > 1) {
+            $properties = [];
+
+            foreach (array_map("trim", explode(";", end($elements))) as $property) {
+                // ...
+                if ( ! preg_match("/^(?P<name>\w+):(?P<value>.+)$/", $property, $property)) {
+                    break;
+                }
+
+                $properties[] = new Property(
+                    $property["name"],
+                    trim($property["value"])
+                );
+            }
+
+            $container->addProperties($properties);
+
+            var_dump($properties);exit;
+        }
+
+        return $container;
     }
 
     /**
