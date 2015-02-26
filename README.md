@@ -4,16 +4,9 @@ Compile LESS into CSS with ease.
 
 ### LESS features support
 
-- variables [ ]
-- mixins [ ]
-- nested rules [ ]
-- media queries (no support)
-- operations [ ]
-- functions [ ]
-- namespaces and accessors [ ]
-- variable scopes [ ]
-- code comments [working on it]
-- importing files [working on it]
+I write this project, first of all, *for myself*.
+That means that I won't implement features that I don't use (and there is a bunch of them).
+If you're interested in my work and want to contribute - you're welcome!
 
 ## License
 
