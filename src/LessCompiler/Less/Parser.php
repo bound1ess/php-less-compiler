@@ -34,12 +34,36 @@ class Parser {
                 continue;
             }
 
-            if ( ! is_null($statement = $this->detectImportStatement($line))) {
-                $tree->addNode($statement);
+            // File imports.
+            if ( ! is_null($import = $this->detectImportStatement($line))) {
+                $tree->addNode($import);
+            }
+
+            // Variable assignments.
+            if ( ! is_null($assignment = $this->detectVariableAssignment($line))) {
+                $tree->addNode($assignment);
             }
         }
 
         return $tree;
+    }
+
+    /**
+     * @param string $line
+     * @return \LessCompiler\Less\Statements\VarAssignmentStatement|null
+     */
+    protected function detectVariableAssignment($line)
+    {
+        $info = [];
+
+        if ( ! preg_match("/^@(?P<name>\w+):(?P<value>.+)$/", trim($line), $info)) {
+            return null;
+        }
+
+        return new VarAssignment(
+            $info["name"],
+            trim($info["value"])
+        );
     }
 
     /**
