@@ -71,4 +71,16 @@ class ParserTest extends \TestCase {
         expect($properties[1]->getValue("value"))->to_be_equal_to("fizz");
     }
 
+    /**
+     * @test
+     */
+    public function it_will_fail_on_a_syntax_error()
+    {
+        $sut =& $this->sut;
+
+        expect(function() use ($sut) {
+            $sut->parse("input[type] {");
+        })->to_throw("LessCompiler\\Less\\Exceptions\\ParseException");
+    }
+
 }
