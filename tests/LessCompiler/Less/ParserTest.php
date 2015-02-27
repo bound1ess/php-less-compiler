@@ -59,7 +59,10 @@ class ParserTest extends \TestCase {
      */
     public function it_parses_a_rule()
     {
-        $tree = $this->sut->parse("#container > .item { foo: bar; baz: fizz; }");
+        $tree = $this->sut->parse(
+            "#container > .item {" . PHP_EOL . "foo: bar;  "
+            . PHP_EOL . "baz: fizz; " . PHP_EOL . "}"
+        );
 
         expect($properties = $tree->getFirstNode()->getValue("properties"))
             ->to_have_length(2);
