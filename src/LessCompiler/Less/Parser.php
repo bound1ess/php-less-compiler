@@ -1,5 +1,17 @@
 <?php namespace LessCompiler\Less;
 
+use LessCompiler\Css\Selectors\ElementSelector,
+    LessCompiler\Css\Selectors\IdSelector,
+    LessCompiler\Css\Selectors\ClassSelector,
+    LessCompiler\Css\Selectors\AttributeSelector,
+    LessCompiler\Css\Selectors\UniversalSelector,
+    LessCompiler\Css\Selectors\PseudoSelector;
+
+use LessCompiler\Css\Combinators\ChildCombinator,
+    LessCompiler\Css\Combinators\DescendentCombinator,
+    LessCompiler\Css\Combinators\GeneralSiblingCombinator,
+    LessCompiler\Css\Combinators\AdjacentSiblingCombinator;
+
 /**
  * LESS parser with a decent performance.
  */
@@ -59,7 +71,51 @@ class Parser {
     {
         $query = new Query;
 
-        // ...
+        // Normalize spaces.
+        $value = preg_replace("/\s{2,}/", " ", $value);
+
+        // Split and analyze.
+        $elements = explode(" ", $value);
+        $validName = "(?P<name>[A-Za-z0-9\-\_]+)";
+
+        for ($i = 0; $i < count($elements); $i++) {
+            // Pick appropriate selector class.
+            $selector = [];
+
+            if ($elements[$i] === "*") {
+                // Universal (*) selector.
+                $elements[$i] = new UniversalSelector;
+
+                continue;
+            }
+
+            if (preg_match("/^{$validName}$/", $elements[$i], $selector)) {
+                // Element selector.
+                $elements[$i] = new ElementSelector($selector["name"]);
+
+                continue;
+            }
+
+            if (preg_match("/^\.{$validName}$/", $elements[$i], $selector)) {
+                // Class selector.
+                $elements[$i] = new ClassSelector($selector["name"]);
+
+                continue;
+            }
+
+            if (preg_match("/^#{$validName}$/", $elements[$i], $selector)) {
+                // Id selector.
+                $elements[$i] = new IdSelector($selector["name"]);
+
+                continue;
+            }
+
+            if (preg_match("/^:{$validName}$/", $elements[$i], $selector)) {
+                $elements[$i] = new PseudoSelector($selector["name"]);
+
+                continue;
+            }
+        }
 
         return $query;
     }
