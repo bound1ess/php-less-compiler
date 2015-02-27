@@ -60,34 +60,43 @@ class Parser {
     protected function detectRule($line)
     {
         $info = [];
+        $brackets = 1;
 
-        if ( ! preg_match("/^(?P<query>.+)\{/", trim($line), $info)) {
+        if ( ! preg_match("/^(?P<query>.+)\{" . "$/", trim($line), $info)) {
             return null;
         }
 
         $container = new Container(
-            new Query(/* @todo */)
+            new Query(/* $this->parseQuery(...) */)
         );
 
-        if (count($elements = array_filter(explode("{", trim($line)))) > 1) {
-            $properties = [];
+        do {
+            $line = $this->readLine();
 
-            foreach (array_map("trim", explode(";", end($elements))) as $property) {
-                // ...
-                if ( ! preg_match("/^(?P<name>\w+):(?P<value>.+)$/", $property, $property)) {
-                    break;
-                }
-
-                $properties[] = new Property(
-                    $property["name"],
-                    trim($property["value"])
-                );
+            if ($this->isComment($line)) {
+                continue;
             }
 
-            $container->addProperties($properties);
+            if (strlen($line = trim($this->removeComments($line))) === 0) {
+                continue;
+            }
 
-            // var_dump($properties);exit;
-        }
+            // Maintain brackets balance.
+            if (strpos($line, "{") !== false) {
+                ++$brackets;
+            } else if (strpos($line, "}") !== false) {
+                --$brackets;
+            }
+
+            if ( ! preg_match("/^(?P<name>\w+):(?P<value>.+);$/", $line, $property)) {
+                continue;
+            }
+
+            $container->addProperty(new Property(
+                $property["name"],
+                trim($property["value"])
+            ));
+        } while ($brackets !== 0);
 
         return $container;
     }
