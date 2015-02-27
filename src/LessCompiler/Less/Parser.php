@@ -55,12 +55,12 @@ class Parser {
 
     /**
      * @param string $line
+     * @param integer $brackets
      * @return null|\LessCompiler\Less\Container
      */
-    protected function detectRule($line)
+    protected function detectRule($line, $brackets = 1)
     {
         $info = [];
-        $brackets = 1;
 
         if ( ! preg_match($ruleRegex = "/^(?P<query>.+)\{" . "$/", trim($line), $info)) {
             return null;
@@ -81,18 +81,18 @@ class Parser {
                 continue;
             }
 
-            // Maintain brackets balance.
-            if (strpos($line, "{") !== false) {
-                ++$brackets;
-            } else if (strpos($line, "}") !== false) {
-                --$brackets;
-            }
-
             // Support nested rules.
             if (preg_match($ruleRegex, $line)) {
                 $container->addChildContainer($this->detectRule($line));
 
                 continue;
+            }
+
+            // Maintain brackets balance.
+            if (strpos($line, "{") !== false) {
+                ++$brackets;
+            } else if (strpos($line, "}") !== false) {
+                --$brackets;
             }
 
             if ( ! preg_match("/^(?P<name>\w+):(?P<value>.+);$/", $line, $property)) {

@@ -74,6 +74,19 @@ class ParserTest extends \TestCase {
     /**
      * @test
      */
+    public function it_parses_nested_rules()
+    {
+        $tree = $this->sut->parse(
+            ".selector {" . PHP_EOL . ".another-selector {" . PHP_EOL . "}" . PHP_EOL . "}"
+        );
+
+        expect($tree->getNodes())->to_have_length(1);
+        expect($tree->getFirstNode()->getValue("children"))->to_have_length(1);
+    }
+
+    /**
+     * @test
+     */
     public function it_will_fail_on_a_syntax_error()
     {
         $sut =& $this->sut;
