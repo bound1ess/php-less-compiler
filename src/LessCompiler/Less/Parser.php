@@ -89,9 +89,7 @@ class Parser {
             }
 
             // Maintain brackets balance.
-            if (strpos($line, "{") !== false) {
-                ++$brackets;
-            } else if (strpos($line, "}") !== false) {
+            if (strpos($line, "}") !== false) {
                 --$brackets;
             }
 
