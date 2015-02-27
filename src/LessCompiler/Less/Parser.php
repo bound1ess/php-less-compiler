@@ -128,7 +128,40 @@ class Parser {
             }
         }
 
-        var_dump($elements);exit;
+        // Now combine the selectors (if possible).
+        for ($i = 1; $i < count($elements); $i++) {
+            if (is_string($elements[$i])) {
+                // Child combinator.
+                if ($elements[$i] === ">") {
+                    $query->addCombinator(new ChildCombinator(
+                        $elements[$i - 1],
+                        $elements[$i + 1]
+                    ));
+
+                    continue;
+                }
+
+                // General sibling combinator.
+                if ($elements[$i] === "~") {
+                    $query->addCombinator(new GeneralSiblingCombinator(
+                        $elements[$i - 1],
+                        $elements[$i + 1]
+                    ));
+
+                    continue;
+                }
+
+                // Adjacent sibling combinator (assumption).
+                $query->addCombinator(new AdjacentSiblingCombinator(
+                    $elements[$i - 1],
+                    $elements[$i + 1]
+                ));
+            } else if ( ! is_string($elements[$i - 1])) {
+                $query->addSelector($elements[$i]);
+            }
+        }
+
+        var_dump($query->getValue());exit;
 
         return $query;
     }
