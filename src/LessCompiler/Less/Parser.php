@@ -62,7 +62,7 @@ class Parser {
         $info = [];
         $brackets = 1;
 
-        if ( ! preg_match("/^(?P<query>.+)\{" . "$/", trim($line), $info)) {
+        if ( ! preg_match($ruleRegex = "/^(?P<query>.+)\{" . "$/", trim($line), $info)) {
             return null;
         }
 
@@ -86,6 +86,13 @@ class Parser {
                 ++$brackets;
             } else if (strpos($line, "}") !== false) {
                 --$brackets;
+            }
+
+            // Support nested rules.
+            if (preg_match($ruleRegex, $line)) {
+                $container->addChildContainer($this->detectRule($line));
+
+                continue;
             }
 
             if ( ! preg_match("/^(?P<name>\w+):(?P<value>.+);$/", $line, $property)) {
