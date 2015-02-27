@@ -84,16 +84,4 @@ class ParserTest extends \TestCase {
         expect($tree->getFirstNode()->getValue("children"))->to_have_length(1);
     }
 
-    /**
-     * @test
-     */
-    public function it_will_fail_on_a_syntax_error()
-    {
-        $sut =& $this->sut;
-
-        expect(function() use ($sut) {
-            $sut->parse("input[type] {");
-        })->to_throw("LessCompiler\\Less\\Exceptions\\ParseException");
-    }
-
 }

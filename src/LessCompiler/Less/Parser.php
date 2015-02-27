@@ -26,12 +26,10 @@ class Parser {
         $tree = new LessTree;
 
         while ( ! $this->queue->isEmpty()) {
-            if ($this->isComment($line = $this->readLine())) {
-                continue;
-            }
-
-            if (strlen($line = $this->removeComments($line)) === 0) {
-                continue;
+            try {
+                $line = $this->readLine();
+            } catch (Exceptions\ParseException $exception) {
+                break;
             }
 
             // File imports.
@@ -71,14 +69,10 @@ class Parser {
         );
 
         do {
-            $line = $this->readLine();
-
-            if ($this->isComment($line)) {
-                continue;
-            }
-
-            if (strlen($line = trim($this->removeComments($line))) === 0) {
-                continue;
+            try {
+                $line = $this->readLine();
+            } catch (Exceptions\ParseException $exception) {
+                break;
             }
 
             // Support nested rules.
@@ -202,11 +196,16 @@ class Parser {
     protected function readLine()
     {
         try {
-            return $this->queue->dequeue();
+            $line = trim($this->queue->dequeue());
         } catch(\RuntimeException $exception) {
-            // @todo
-            throw new Exceptions\ParseException($exception->getMessage());
+            throw new Exceptions\ParseException;
         }
+
+        if ($this->isComment($line) or ! strlen($line = trim($this->removeComments($line)))) {
+            return $this->readLine();
+        }
+
+        return $line;
     }
 
 }
