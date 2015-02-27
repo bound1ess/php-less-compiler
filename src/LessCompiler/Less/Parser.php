@@ -52,6 +52,19 @@ class Parser {
     }
 
     /**
+     * @param string $value
+     * @return \LessCompiler\Less\Query
+     */
+    protected function parseQuery($value)
+    {
+        $query = new Query;
+
+        // ...
+
+        return $query;
+    }
+
+    /**
      * @param string $line
      * @param integer $brackets
      * @return null|\LessCompiler\Less\Container
@@ -65,7 +78,7 @@ class Parser {
         }
 
         $container = new Container(
-            new Query(/* $this->parseQuery(...) */)
+            $this->parseQuery(trim($info["query"]))
         );
 
         do {

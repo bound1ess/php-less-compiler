@@ -96,4 +96,16 @@ class ParserTest extends \TestCase {
         expect($tree->getFirstNode()->getValue("properties"))->to_have_length(0);
     }
 
+    /**
+     * @test
+     */
+    public function it_parses_a_query()
+    {
+        $query = $this->sut->parse($selector = "#element > .item[type] {" . PHP_EOL . "}")
+            ->getFirstNode()
+            ->getValue("query");
+
+        expect($query->represent())->to_be_equal_to($selector);
+    }
+
 }
