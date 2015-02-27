@@ -85,7 +85,7 @@ class Parser {
             // Pick appropriate selector class.
             $selector = [];
 
-            if (preg_match("/^\[{$validName}=(?P<value>.+)\]$/", $elements[$i], $selector)) {
+            if (preg_match("/^\[{$validName}(?P<value>.*)\]$/", $elements[$i], $selector)) {
                 // Attribute selector.
                 $elements[$i] = new AttributeSelector($selector["name"], $selector["value"]);
 
