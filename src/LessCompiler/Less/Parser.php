@@ -74,6 +74,9 @@ class Parser {
         // Normalize spaces.
         $value = preg_replace("/\s{2,}/", " ", $value);
 
+        // Modify attribute selectors.
+        $value = str_replace("[", " [", $value);
+
         // Split and analyze.
         $elements = explode(" ", $value);
         $validName = "(?P<name>[A-Za-z0-9\-\_]+)";
@@ -81,6 +84,13 @@ class Parser {
         for ($i = 0; $i < count($elements); $i++) {
             // Pick appropriate selector class.
             $selector = [];
+
+            if (preg_match("/^\[{$validName}=(?P<value>.+)\]$/", $elements[$i], $selector)) {
+                // Attribute selector.
+                $elements[$i] = new AttributeSelector($selector["name"], $selector["value"]);
+
+                continue;
+            }
 
             if ($elements[$i] === "*") {
                 // Universal (*) selector.
@@ -111,11 +121,14 @@ class Parser {
             }
 
             if (preg_match("/^:{$validName}$/", $elements[$i], $selector)) {
+                // "Pseudo" selector.
                 $elements[$i] = new PseudoSelector($selector["name"]);
 
                 continue;
             }
         }
+
+        var_dump($elements);exit;
 
         return $query;
     }
