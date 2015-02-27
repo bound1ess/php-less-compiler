@@ -84,4 +84,16 @@ class ParserTest extends \TestCase {
         expect($tree->getFirstNode()->getValue("children"))->to_have_length(1);
     }
 
+    /**
+     * @test
+     */
+    public function it_sometimes_fails()
+    {
+        $tree = $this->sut->parse(
+            ".selector {" . PHP_EOL . "// something" . PHP_EOL
+        );
+
+        expect($tree->getFirstNode()->getValue("properties"))->to_have_length(0);
+    }
+
 }
