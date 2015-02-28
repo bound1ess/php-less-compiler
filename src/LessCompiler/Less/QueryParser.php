@@ -9,13 +9,23 @@ use LessCompiler\Css\Combinators\Combinator,
 class QueryParser {
 
     /**
+     * @var array
+     */
+    protected $combinators = [
+        "child"           => ">",
+        "generalSibling"  => "~",
+        "adjacentSibling" => "+",
+    ];
+
+    /**
      * @param string $query
      * @return Query
      */
     public function parseQuery($query)
     {
-        $query = new Query;
         $elements = $this->split($query);
+
+        $query = new Query;
 
         foreach ($this->insertCombinators($this->insertSelectors($elements)) as $element) {
             if ($element instanceof Selector) {
@@ -52,17 +62,17 @@ class QueryParser {
     {
         $newElements = [];
 
-        $combinators = [
-            "child"           => ">",
-            "generalSibling"  => "~",
-            "adjacentSibling" => "+",
-        ];
-
         for ($index = 0; $index < count($elements); $index++) {
             $prev = isset ($elements[$index - 1]) ? $elements[$index - 1] : null;
             $next = isset ($elements[$index + 1]) ? $elements[$index + 1] : null;
 
-            foreach ($combinators as $id => $symbol) {
+            if (($elements[$index] instanceof Selector) and ($next instanceof Selector)) {
+                $newElements[] = $elements[$index];
+
+                continue;
+            }
+
+            foreach ($this->combinators as $id => $symbol) {
                 if ($elements[$index] === $symbol) {
                     $newElements[] = $this->createCombinator($id, [$prev, $next]);
                 }
@@ -90,8 +100,15 @@ class QueryParser {
         ];
 
         $match = [];
+        $newElements = [];
 
         for ($index = 0; $index < count($elements); $index++) {
+            if (in_array($elements[$index], $this->combinators)) {
+                $newElements[] = $elements[$index];
+
+                continue;
+            }
+
             foreach ($regExps as $id => $regExp) {
                 if (preg_match($regExp, $elements[$index], $match)) {
                     $arguments = [];
@@ -104,10 +121,14 @@ class QueryParser {
                         $arguments[] = $match["value"];
                     }
 
-                    $elements[$index] = $this->createSelector($id, $arguments);
+                    $newElements[] = $this->createSelector($id, $arguments);
+
+                    continue;
                 }
             }
         }
+
+        return $newElements;
     }
 
     /**

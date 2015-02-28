@@ -1,17 +1,5 @@
 <?php namespace LessCompiler\Less;
 
-use LessCompiler\Css\Selectors\ElementSelector,
-    LessCompiler\Css\Selectors\IdSelector,
-    LessCompiler\Css\Selectors\ClassSelector,
-    LessCompiler\Css\Selectors\AttributeSelector,
-    LessCompiler\Css\Selectors\UniversalSelector,
-    LessCompiler\Css\Selectors\PseudoSelector;
-
-use LessCompiler\Css\Combinators\ChildCombinator,
-    LessCompiler\Css\Combinators\DescendentCombinator,
-    LessCompiler\Css\Combinators\GeneralSiblingCombinator,
-    LessCompiler\Css\Combinators\AdjacentSiblingCombinator;
-
 /**
  * LESS parser with a decent performance.
  */
@@ -64,102 +52,12 @@ class Parser {
     }
 
     /**
-     * @param string $value
+     * @param string $query
      * @return \LessCompiler\Less\Query
      */
-    protected function parseQuery($value)
+    protected function parseQuery($query)
     {
-        $query = new Query;
-
-        // Normalize spaces.
-        $value = preg_replace("/\s{2,}/", " ", $value);
-
-        // Modify attribute selectors.
-        $value = str_replace("[", " [", $value);
-
-        // Split and analyze.
-        $elements = explode(" ", $value);
-        $validName = "(?P<name>[A-Za-z0-9\-\_]+)";
-
-        for ($i = 0; $i < count($elements); $i++) {
-            // Pick appropriate selector class.
-            $selector = [];
-
-            if (preg_match("/^\[{$validName}(?P<value>.*)\]$/", $elements[$i], $selector)) {
-                // Attribute selector.
-                $elements[$i] = new AttributeSelector($selector["name"], $selector["value"]);
-
-                continue;
-            }
-
-            if ($elements[$i] === "*") {
-                // Universal (*) selector.
-                $elements[$i] = new UniversalSelector;
-
-                continue;
-            }
-
-            if (preg_match("/^{$validName}$/", $elements[$i], $selector)) {
-                // Element selector.
-                $elements[$i] = new ElementSelector($selector["name"]);
-
-                continue;
-            }
-
-            if (preg_match("/^\.{$validName}$/", $elements[$i], $selector)) {
-                // Class selector.
-                $elements[$i] = new ClassSelector($selector["name"]);
-
-                continue;
-            }
-
-            if (preg_match("/^#{$validName}$/", $elements[$i], $selector)) {
-                // Id selector.
-                $elements[$i] = new IdSelector($selector["name"]);
-
-                continue;
-            }
-
-            if (preg_match("/^:{$validName}$/", $elements[$i], $selector)) {
-                // "Pseudo" selector.
-                $elements[$i] = new PseudoSelector($selector["name"]);
-
-                continue;
-            }
-        }
-
-        // Now combine the selectors (if possible).
-        for ($i = 0; $i < count($elements); $i++) {
-            if (is_string($elements[$i])) {
-                // Child combinator.
-                if ($elements[$i] === ">") {
-                    $query->addCombinator(new ChildCombinator(
-                        $elements[$i - 1],
-                        $elements[$i + 1]
-                    ));
-
-                    continue;
-                }
-
-                // General sibling combinator.
-                if ($elements[$i] === "~") {
-                    $query->addCombinator(new GeneralSiblingCombinator(
-                        $elements[$i - 1],
-                        $elements[$i + 1]
-                    ));
-
-                    continue;
-                }
-
-                // Adjacent sibling combinator (assumption).
-                $query->addCombinator(new AdjacentSiblingCombinator(
-                    $elements[$i - 1],
-                    $elements[$i + 1]
-                ));
-            } else if ( ! isset ($elements[$i - 1]) or ! is_string($elements[$i - 1])) {
-                $query->addSelector($elements[$i]);
-            }
-        }
+        $query = (new QueryParser)->parseQuery($query);
 
         return $query;
     }

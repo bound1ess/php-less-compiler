@@ -105,7 +105,7 @@ class ParserTest extends \TestCase {
             ->getFirstNode()
             ->getValue("query");
 
-        expect($query->represent())->to_be_equal_to("#element > .item[type]");
+        expect($query->represent())->to_be_equal_to("#element > .item [type]");
     }
 
 }
