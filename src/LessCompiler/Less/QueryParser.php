@@ -48,6 +48,34 @@ class QueryParser {
      * @param array $elements
      * @return array
      */
+    protected function insertCombinators(array $elements)
+    {
+        $newElements = [];
+
+        $combinators = [
+            "child"           => ">",
+            "generalSibling"  => "~",
+            "adjacentSibling" => "+",
+        ];
+
+        for ($index = 0; $index < count($elements); $index++) {
+            $prev = isset ($elements[$index - 1]) ? $elements[$index - 1] : null;
+            $next = isset ($elements[$index + 1]) ? $elements[$index + 1] : null;
+
+            foreach ($combinators as $id => $symbol) {
+                if ($elements[$index] === $symbol) {
+                    $newElements[] = $this->createCombinator($id, [$prev, $next]);
+                }
+            }
+        }
+
+        return $newElements;
+    }
+
+    /**
+     * @param array $elements
+     * @return array
+     */
     protected function insertSelectors(array $elements)
     {
         $nameRegExp = "(?P<name>[A-Za-z0-9\-\_]+)";
