@@ -16,7 +16,7 @@ class TreeDumper {
         $dumped = [];
 
         foreach ($tree as $node) {
-            $dumped[] = $this->dumpValue($node->getValue());
+            $dumped[] = $this->dumpValue($node->getValue(), $node);
         }
 
         return $dumpy->dump($dumped);
@@ -24,9 +24,10 @@ class TreeDumper {
 
     /**
      * @param mixed $value
+     * @param object $object
      * @return array
      */
-    protected function dumpValue($value)
+    protected function dumpValue($value, $object)
     {
         $dumped = [];
 
@@ -35,10 +36,12 @@ class TreeDumper {
         }
 
         foreach ($value as $key => $anotherValue) {
+            $key = sprintf("%s: %s", (new \ReflectionClass($object))->getShortName(), $key);
+
             if (is_array($anotherValue)) {
-                $dumped[$key] = $this->dumpValue($anotherValue);
+                $dumped[$key] = $this->dumpValue($anotherValue, $object);
             } else if ($anotherValue instanceof Node) {
-                $dumped[$key] = $this->dumpValue($anotherValue->getValue());
+                $dumped[$key] = $this->dumpValue($anotherValue->getValue(), $anotherValue);
             } else {
                 $dumped[$key] = $anotherValue;
             }
