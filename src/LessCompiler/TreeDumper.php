@@ -11,67 +11,40 @@ class TreeDumper {
      */
     public function dumpTree(AbstractSyntaxTree $tree)
     {
-        $output = "";
+        $dumpy = new \PhpPackages\Dumpy\Dumpy;
+
+        $dumped = [];
 
         foreach ($tree as $node) {
-            $output .= $this->dumpNode($node);
+            $dumped[] = $this->dumpValue($node->getValue());
         }
 
-        return $output;
-    }
-
-    /**
-     * @param \LessCompiler\Node $node
-     * @return string
-     */
-    protected function dumpNode(Node $node, $indenting = 0)
-    {
-        $indentation = "  ";
-
-        $output = sprintf(
-            "%s%s:%s",
-            str_repeat($indentation, $indenting + 1),
-            (new \ReflectionClass($node))->getShortName(),
-            PHP_EOL
-        );
-
-        if (is_array($node->getValue())) {
-            foreach ($node->getValue() as $key => $value) {
-                if ($value instanceof Node) {
-                    $value = $this->dumpNode($value, $indenting + 1);
-                }
-
-                // Assuming it's not nested.
-                if (is_array($value)) {
-                    foreach ($value as $anotherValue) {
-                        $output .= $this->dumpNode($anotherValue);
-                    }
-
-                    continue;
-                }
-
-                $output .= sprintf(
-                    "%s%s: %s%s",
-                    str_repeat($indentation, $indenting + 2),
-                    ucfirst($key),
-                    $value,
-                    PHP_EOL
-                );
-            }
-        } else {
-            $output = sprintf("%sValue: %s", $indentation, $node->getValue());
-        }
-
-        return $output;
+        return $dumpy->dump($dumped);
     }
 
     /**
      * @param mixed $value
-     * @return string
+     * @return array
      */
     protected function dumpValue($value)
     {
-        // ...
+        $dumped = [];
+
+        if ( ! is_array($value)) {
+            return $value;
+        }
+
+        foreach ($value as $key => $anotherValue) {
+            if (is_array($anotherValue)) {
+                $dumped[$key] = $this->dumpValue($anotherValue);
+            } else if ($anotherValue instanceof Node) {
+                $dumped[$key] = $this->dumpValue($anotherValue->getValue());
+            } else {
+                $dumped[$key] = $anotherValue;
+            }
+        }
+
+        return $dumped;
     }
 
 }
