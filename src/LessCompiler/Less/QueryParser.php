@@ -66,7 +66,9 @@ class QueryParser {
             $prev = isset ($elements[$index - 1]) ? $elements[$index - 1] : null;
             $next = isset ($elements[$index + 1]) ? $elements[$index + 1] : null;
 
-            if (($elements[$index] instanceof Selector) and ($next instanceof Selector)) {
+            if (($elements[$index] instanceof Selector)
+                and ! (is_string($prev) or is_string($next))
+            ) {
                 $newElements[] = $elements[$index];
 
                 continue;
