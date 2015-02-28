@@ -36,7 +36,13 @@ class TreeDumper {
         }
 
         foreach ($value as $key => $anotherValue) {
-            $key = sprintf("%s: %s", (new \ReflectionClass($object))->getShortName(), $key);
+            if ( ! is_integer($key)) {
+                $key = sprintf(
+                    "%s: %s",
+                    (new \ReflectionClass($object))->getShortName(),
+                    $key
+                );
+            }
 
             if (is_array($anotherValue)) {
                 $dumped[$key] = $this->dumpValue($anotherValue, $object);

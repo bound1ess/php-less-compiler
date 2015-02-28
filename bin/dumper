@@ -3,7 +3,7 @@
 
 require __DIR__ . "/../vendor/autoload.php";
 
-echo "Enter LESS code line by line or type \"dump\" (without qoutes) to finish:", PHP_EOL;
+echo "Enter LESS code line by line, then type \"dump\" (without qoutes) to dump:", PHP_EOL;
 
 $code = "";
 
