@@ -6,12 +6,13 @@
 class Query extends \LessCompiler\Node {
 
     /**
+     * @param array $elements
      * @return Query
      */
-    public function __construct()
+    public function __construct(array $elements = [])
     {
         parent::__construct([
-            "elements" => [],
+            "elements" => $elements,
         ]);
     }
 
