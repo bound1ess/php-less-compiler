@@ -41,6 +41,15 @@ class TreeDumper {
                     $value = $this->dumpNode($value, $indenting + 1);
                 }
 
+                // Assuming it's not nested.
+                if (is_array($value)) {
+                    foreach ($value as $anotherValue) {
+                        $output .= $this->dumpNode($anotherValue);
+                    }
+
+                    continue;
+                }
+
                 $output .= sprintf(
                     "%s%s: %s%s",
                     str_repeat($indentation, $indenting + 2),
@@ -54,6 +63,15 @@ class TreeDumper {
         }
 
         return $output;
+    }
+
+    /**
+     * @param mixed $value
+     * @return string
+     */
+    protected function dumpValue($value)
+    {
+        // ...
     }
 
 }
