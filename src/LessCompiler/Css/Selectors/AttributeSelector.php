@@ -23,7 +23,7 @@ class AttributeSelector extends Selector {
      */
     public function represent()
     {
-        if (is_null($this->value["attribute_value"])) {
+        if ( ! $this->value["attribute_value"]) {
             return sprintf("[%s]", $this->value["attribute_name"]);
         }
 

@@ -129,7 +129,7 @@ class Parser {
         }
 
         // Now combine the selectors (if possible).
-        for ($i = 1; $i < count($elements); $i++) {
+        for ($i = 0; $i < count($elements); $i++) {
             if (is_string($elements[$i])) {
                 // Child combinator.
                 if ($elements[$i] === ">") {
@@ -156,12 +156,10 @@ class Parser {
                     $elements[$i - 1],
                     $elements[$i + 1]
                 ));
-            } else if ( ! is_string($elements[$i - 1])) {
+            } else if ( ! isset ($elements[$i - 1]) or ! is_string($elements[$i - 1])) {
                 $query->addSelector($elements[$i]);
             }
         }
-
-        var_dump($query->getValue());exit;
 
         return $query;
     }
@@ -241,14 +239,14 @@ class Parser {
     {
         $info = [];
 
-        if (preg_match("/^@import (?P<mode>\(\w+\)) (?P<file>.+)$/", $line, $info)) {
+        if (preg_match("/^@import (?P<mode>\(\w+\)) (?P<file>[^;]+)$/", $line, $info)) {
             return new Statements\ImportStatement(
                 preg_replace("/[\'\"]+/", "", $info["file"]),
                 trim(preg_replace("/[\(\)]{1}/", "", $info["mode"]))
             );
         }
 
-        if ( ! preg_match("/^@import (?P<file>.+)$/", $line, $info)) {
+        if ( ! preg_match("/^@import (?P<file>[^;]+)$/", $line, $info)) {
             return null;
         }
 
