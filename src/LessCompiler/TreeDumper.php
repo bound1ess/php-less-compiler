@@ -11,7 +11,49 @@ class TreeDumper {
      */
     public function dumpTree(AbstractSyntaxTree $tree)
     {
-        return "Hello, world!";
+        $output = "";
+
+        foreach ($tree as $node) {
+            $output .= $this->dumpNode($node);
+        }
+
+        return $output;
+    }
+
+    /**
+     * @param \LessCompiler\Node $node
+     * @return string
+     */
+    protected function dumpNode(Node $node, $indenting = 0)
+    {
+        $indentation = "  ";
+
+        $output = sprintf(
+            "%s%s:%s",
+            str_repeat($indentation, $indenting + 1),
+            (new \ReflectionClass($node))->getShortName(),
+            PHP_EOL
+        );
+
+        if (is_array($node->getValue())) {
+            foreach ($node->getValue() as $key => $value) {
+                if ($value instanceof Node) {
+                    $value = $this->dumpNode($value, $indenting + 1);
+                }
+
+                $output .= sprintf(
+                    "%s%s: %s%s",
+                    str_repeat($indentation, $indenting + 2),
+                    ucfirst($key),
+                    $value,
+                    PHP_EOL
+                );
+            }
+        } else {
+            $output = sprintf("%sValue: %s", $indentation, $node->getValue());
+        }
+
+        return $output;
     }
 
 }

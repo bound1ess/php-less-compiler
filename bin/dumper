@@ -14,6 +14,6 @@ while (trim($line = readline()) !== "dump") {
 echo "Dumping...", PHP_EOL;
 
 echo (new LessCompiler\TreeDumper)
-    ->dumpTree((new LessCompiler\Less\Parser)->parse($code)), PHP_EOL;
+    ->dumpTree((new LessCompiler\Less\Parser)->parse($code));
 
 # vim: syntax=php
