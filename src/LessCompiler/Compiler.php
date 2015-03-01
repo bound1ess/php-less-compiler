@@ -7,10 +7,10 @@ class Compiler {
 
     /**
      * @param \LessCompiler\Less\LessTree $tree
-     * @return string
+     * @return \LessCompiler\Css\CssTree
      */
     public function compileTree(Less\LessTree $tree)
     {
-        return "foobar"; // @todo
+        return new Css\CssTree;
     }
 }
