@@ -39,19 +39,26 @@ class Query extends \LessCompiler\Node {
      */
     public function represent()
     {
-        $representation = "";
+        $representation = [];
 
         foreach ($this->value["elements"] as $element) {
             // If that's a Selector, call represent().
             if ($element instanceof Selectors\Selector) {
-                $representation .= $element->represent();
+                // If that's an AttributeSelector, append to the last element.
+                if ($element instanceof Selectors\AttributeSelector) {
+                    $representation[count($representation) - 1] .= $element->represent();
+
+                    continue;
+                }
+
+                $representation[] = $element->represent();
             } else {
                 // That must be a Combinator.
-                $representation .= $element->combine();
+                $representation[] = $element->combine();
             }
         }
 
-        return $representation;
+        return implode(" ", $representation);
     }
 
 }

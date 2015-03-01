@@ -14,7 +14,7 @@ class AttributeSelector extends Selector {
     {
         parent::__construct([
             "attribute_name"  => $name,
-            "attribute_value" => $value,
+            "attribute_value" => preg_replace("/[=\"\']+/", "", $value),
         ]);
     }
 

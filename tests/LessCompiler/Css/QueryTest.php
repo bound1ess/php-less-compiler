@@ -17,7 +17,7 @@ class QueryTest extends \TestCase {
         $this->sut->addSelector($this->mockSelector("[type=\"text\"]"));
 
         expect($this->sut->represent())
-            ->to_be_equal_to("#container.element > .sub-element[type=\"text\"]");
+            ->to_be_equal_to("#container .element > .sub-element [type=\"text\"]");
     }
 
     /**
