@@ -14,6 +14,6 @@ class CompilerTest extends \TestCase {
     {
         $ast = \Mockery::mock("LessCompiler\\Less\\LessTree");
 
-        expect($this->sut->compileTree($ast))->to_be_of_type("string");
+        expect($this->sut->compileTree($ast))->to_be_a("LessCompiler\\Css\\CssTree");
     }
 }

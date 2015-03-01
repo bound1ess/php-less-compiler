@@ -98,6 +98,13 @@ class Parser {
                 --$brackets;
             }
 
+            // Support nested variable declarations.
+            if ( ! is_null($var = $this->detectVariableAssignment($line))) {
+                $container->addVariable($var);
+
+                continue;
+            }
+
             if ( ! preg_match("/^(?P<name>\w+):(?P<value>.+);$/", $line, $property)) {
                 continue;
             }
