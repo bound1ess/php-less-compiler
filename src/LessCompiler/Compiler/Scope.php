@@ -40,7 +40,11 @@ class Scope {
      */
     public function setVariable($name, $value)
     {
-        // ...
+        if (array_key_exists($name, $this->variables)) {
+            throw new Exceptions\VarAlreadyDefinedException($name);
+        }
+
+        $this->variables[$name] = $value;
     }
 
     /**
@@ -50,6 +54,10 @@ class Scope {
      */
     public function resolve($name)
     {
+        if (array_key_exists($name, $this->variables)) {
+            return $this->variables[$name];
+        }
+
         // ...
     }
 
