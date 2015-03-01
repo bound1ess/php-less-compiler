@@ -62,6 +62,7 @@ class ScopeTest extends \TestCase {
 
         expect($this->sut->interpolate("what is @foo?"))->to_be_equal_to("what is bar?");
         expect($this->sut->interpolate("what is @{baz}?"))->to_be_equal_to("what is fizz?");
+        expect($this->sut->interpolate("@foo != @{baz}"))->to_be_equal_to("bar != fizz");
     }
 
 }
