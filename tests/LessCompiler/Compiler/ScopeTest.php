@@ -43,6 +43,8 @@ class ScopeTest extends \TestCase {
         $scope->setParentScope($this->sut);
         $scope->setVariable("baz", "fizz");
 
+        expect($scope->getParentScope())->to_be_equal_to($this->sut);
+
         expect($scope->resolve("baz"))->to_be_equal_to("fizz");
         expect($scope->resolve("foo"))->to_be_equal_to("bar");
         expect(function() use ($scope) {
