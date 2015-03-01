@@ -32,4 +32,22 @@ class ScopeTest extends \TestCase {
         })->to_throw("LessCompiler\\Compiler\\Exceptions\\VarAlreadyDefinedException");
     }
 
+    /**
+     * @test
+     */
+    public function it_finds_a_variable_value_by_its_name()
+    {
+        $this->sut->setVariable("foo", "bar");
+
+        $scope = new Scope;
+        $scope->setParentScope($this->sut);
+        $scope->setVariable("baz", "fizz");
+
+        expect($scope->resolve("baz"))->to_be_equal_to("fizz");
+        expect($scope->resolve("foo"))->to_be_equal_to("bar");
+        expect(function() use ($scope) {
+            $scope->resolve("invalid");
+        })->to_throw("LessCompiler\\Compiler\\Exceptions\\UndefinedVariableException");
+    }
+
 }

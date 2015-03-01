@@ -25,6 +25,14 @@ class Scope {
     }
 
     /**
+     * @return null|Scope
+     */
+    public function getParentScope()
+    {
+        return $this->parentScope;
+    }
+
+    /**
      * @return boolean
      */
     public function isMain()
@@ -58,7 +66,11 @@ class Scope {
             return $this->variables[$name];
         }
 
-        // ...
+        if ( ! is_null($this->parentScope)) {
+            return $this->parentScope->resolve($name);
+        }
+
+        throw new Exceptions\UndefinedVariableException($name);
     }
 
     /**
