@@ -11,8 +11,8 @@ class Compiler {
     protected $scopeManager;
 
     /**
-     * @param \LessCompiler\Less\LessTree $tree
-     * @return \LessCompiler\Css\CssTree
+     * @param Less\LessTree $tree
+     * @return Css\CssTree
      */
     public function compileTree(Less\LessTree $tree)
     {
@@ -48,19 +48,52 @@ class Compiler {
 
     /**
      * @param Less\Container $container
-     * @param string $id
+     * @param Less\Query $query
      * @return Css\Container
      */
-    protected function compileContainer(Less\Container $container, $id = "")
+    protected function compileContainer(Less\Container $container, Less\Query $query = null)
     {
         $containers = [];
 
-        $id = implode(" ", [$id, $container->getValue("query")->represent()]);
-        var_dump($id);
+        // Build proper selector value.
+        if ( ! is_null($query)) {
+            $id = $query->merge($container->getValue("query"))->represent();
+        } else {
+            $id = $container->getValue("query")->represent();
+        }
+
+        // ...and scope.
+        $scope = $this->scopeManager->getScope(
+            $id,
+            $this->scopeManager->getScope($id)
+        );
+
+        // Set variables...
+        foreach ($container->getValue("variables") as $variable) {
+            $scope->setVariable(
+                $variable->getValue("name"),
+                $variable->getValue("value")
+            );
+        }
+
+        // Set properties.
+        $newContainer = new Css\Container(new Css\Query);
+
+        foreach ($container->getValue("properties") as $property) {
+            $newContainer->addProperty(new Css\Property(
+                $property->getValue("name"),
+                $scope->interpolate($property->getValue("value"))
+            ));
+        }
+
+        $containers[] = $newContainer;
 
         // Nested.
         foreach ($container->getValue("children") as $children) {
-            $containers = array_merge($containers, $this->compileContainer($children, $id));
+            $containers = array_merge(
+                $containers,
+                $this->compileContainer($children, $container->getValue("query"))
+            );
         }
 
         return $containers;

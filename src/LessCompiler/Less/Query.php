@@ -6,12 +6,17 @@
 class Query extends \LessCompiler\Css\Query {
 
     /**
-     * @param \LessCompiler\Less\Query $query
-     * @return void
+     * @param Query $query
+     * @return Query
      */
     public function merge(Query $query)
     {
-        $this->value = array_merge($this->value, $query->getValue());
+        $this->value["elements"] = array_merge(
+            $this->value["elements"],
+            $query->getValue("elements")
+        );
+
+        return $this;
     }
 
 }
