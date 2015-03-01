@@ -6,6 +6,11 @@
 class Compiler {
 
     /**
+     * @var ScopeManager
+     */
+    protected $scopeManager;
+
+    /**
      * @param \LessCompiler\Less\LessTree $tree
      * @return \LessCompiler\Css\CssTree
      */
@@ -13,25 +18,51 @@ class Compiler {
     {
         $newTree = new Css\CssTree;
 
-        // Init global scope and ScopeManager.
-        $globalScope = new Compiler\Scope;
-        $scopeManager = new Compiler\ScopeManager;
+        // Init ScopeManager.
+        $this->scopeManager = new Compiler\ScopeManager;
 
         foreach ($tree as $node) {
             if ($node instanceof Less\Statements\ImportStatement) {
                 // ...
+                continue;
             }
 
             if ($node instanceof Less\Statements\VarAssignmentStatement) {
-                $globalScope->setVariable(
+                $this->scopeManager->getScope("global")->setVariable(
                     $node->getValue("name"),
                     $node->getValue("value")
                 );
 
                 continue;
             }
+
+            if ($node instanceof Less\Container) {
+                foreach ($this->compileContainer($node) as $container) {
+                    $newTree->addNode($container);
+                }
+            }
         }
 
         return $newTree;
+    }
+
+    /**
+     * @param Less\Container $container
+     * @param string $id
+     * @return Css\Container
+     */
+    protected function compileContainer(Less\Container $container, $id = "")
+    {
+        $containers = [];
+
+        $id = implode(" ", [$id, $container->getValue("query")->represent()]);
+        var_dump($id);
+
+        // Nested.
+        foreach ($container->getValue("children") as $children) {
+            $containers = array_merge($containers, $this->compileContainer($children, $id));
+        }
+
+        return $containers;
     }
 }

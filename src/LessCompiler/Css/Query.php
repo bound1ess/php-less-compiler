@@ -44,12 +44,7 @@ class Query extends \LessCompiler\Node {
         foreach ($this->value["elements"] as $element) {
             // If that's a Selector, call represent().
             if ($element instanceof Selectors\Selector) {
-                // If that's an AttributeSelector, we don't want an extra space character.
-                if (preg_match("/^\[(.+)\]$/", $returnedValue = $element->represent())) {
-                    $representation .= $returnedValue;
-                } else {
-                    $representation .= sprintf("%s ", $returnedValue);
-                }
+                $representation .= $element->represent();
             } else {
                 // That must be a Combinator.
                 $representation .= $element->combine();
