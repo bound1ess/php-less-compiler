@@ -58,8 +58,10 @@ class ScopeTest extends \TestCase {
     public function it_inserts_variable_value_into_a_string()
     {
         $this->sut->setVariable("foo", "bar");
+        $this->sut->setVariable("baz", "fizz");
 
         expect($this->sut->interpolate("what is @foo?"))->to_be_equal_to("what is bar?");
+        expect($this->sut->interpolate("what is @{baz}?"))->to_be_equal_to("what is fizz?");
     }
 
 }

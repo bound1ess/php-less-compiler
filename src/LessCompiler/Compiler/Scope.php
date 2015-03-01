@@ -87,6 +87,12 @@ class Scope {
             $value = str_replace("@" . $name, $this->resolve($name), $value);
         }
 
+        preg_match_all("/@\{(?P<name>\w+)\}/", $value, $matches);
+
+        foreach ($matches["name"] as $name) {
+            $value = str_replace(sprintf("@{%s}", $name), $this->resolve($name), $value);
+        }
+
         return $value;
     }
 
