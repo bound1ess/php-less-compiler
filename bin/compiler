@@ -7,14 +7,27 @@ echo "Enter LESS code line by line, then type \"compile\" (without quotes)"
     . " to parse and compile:", PHP_EOL;
 
 $code = "";
+$dumpTree = false;
 
 while (trim($line = readline()) !== "compile") {
+    if (trim($line) == "dump") {
+        $dumpTree = true;
+
+        continue;
+    }
+
     $code .= PHP_EOL . $line;
 }
 
-echo "Parsing and compiling...", PHP_EOL;
-
 $lessTree = (new LessCompiler\Less\Parser)->parse($code);
+
+if ($dumpTree) {
+    echo "Dumping...", PHP_EOL;
+    echo (new LessCompiler\TreeDumper)->dumpTree($lessTree);
+}
+
+echo "Compiling...", PHP_EOL;
+
 $cssTree = (new LessCompiler\Compiler)->compileTree($lessTree);
 
 echo (new LessCompiler\Css\Printers\StandardPrinter)->printTree($cssTree);
