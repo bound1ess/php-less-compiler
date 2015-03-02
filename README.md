@@ -27,6 +27,8 @@ If you're interested in my work and want to contribute - you're welcome!
 
 ##### Variables
 
+LESS:
+
 ```less
 @foo: bar;
 
@@ -41,6 +43,8 @@ If you're interested in my work and want to contribute - you're welcome!
     }
 }
 ```
+
+CSS:
 
 ```css
 #box > .item input[type="text"] {

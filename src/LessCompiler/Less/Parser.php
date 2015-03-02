@@ -105,7 +105,7 @@ class Parser {
                 continue;
             }
 
-            if ( ! preg_match("/^(?P<name>\w+):(?P<value>.+);$/", $line, $property)) {
+            if ( ! preg_match("/^(?P<name>.+):(?P<value>.+);$/", $line, $property)) {
                 continue;
             }
 
@@ -126,7 +126,7 @@ class Parser {
     {
         $info = [];
 
-        if ( ! preg_match("/^@(?P<name>\w+):(?P<value>.+);$/", trim($line), $info)) {
+        if ( ! preg_match("/^@(?P<name>.+):(?P<value>.+);$/", trim($line), $info)) {
             return null;
         }
 
