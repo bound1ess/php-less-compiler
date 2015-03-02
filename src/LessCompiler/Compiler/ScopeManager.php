@@ -28,7 +28,7 @@ class ScopeManager {
     {
         if ( ! array_key_exists($id, $this->scopes)) {
             $this->scopes[$id] = new Scope;
-            $this->scopes[$id]->setParentScope($parentScope ?: $this->scopes["global"]);
+            $this->scopes[$id]->setParentScope($parentScope);
         }
 
         return $this->scopes[$id];

@@ -55,17 +55,18 @@ class Compiler {
     {
         $containers = [];
 
-        // Build proper selector.
-        if ( ! is_null($query)) {
-            $selector = $query->merge($container->getValue("query"));
+        if (is_null($query)) {
+            $id = $container->getValue("query")->represent();
+            $parentId = "global";
         } else {
-            $selector = $container->getValue("query");
+            $id = $query->merge($container->getValue("query"))->represent();
+            $parentId = $query->represent();
         }
 
         // ...and scope.
         $scope = $this->scopeManager->getScope(
-            $selector->represent(),
-            $this->scopeManager->getScope($selector->represent())
+            $id,
+            $this->scopeManager->getScope($parentId)
         );
 
         // Set variables...
@@ -77,7 +78,11 @@ class Compiler {
         }
 
         // Set properties.
-        $newContainer = new Css\Container($selector);
+        $containerQuery = $container->getValue("query");
+
+        $newContainer = new Css\Container(
+            is_null($query) ? $containerQuery : $query->merge($containerQuery)
+        );
 
         foreach ($container->getValue("properties") as $property) {
             $newContainer->addProperty(new Css\Property(
