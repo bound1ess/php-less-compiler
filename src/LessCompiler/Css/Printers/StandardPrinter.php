@@ -17,6 +17,10 @@ class StandardPrinter extends Printer {
         $printed = [];
 
         foreach ($tree as $node) {
+            if (count($node->getValue("properties")) < 1) {
+                continue;
+            }
+
             $printed[] = $this->printContainer($node);
         }
 
