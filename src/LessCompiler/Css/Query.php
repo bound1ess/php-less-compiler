@@ -1,5 +1,7 @@
 <?php namespace LessCompiler\Css;
 
+use LessCompiler\Compiler\Scope;
+
 /**
  * A query string. Consists of Selectors and Combinators.
  */
@@ -58,7 +60,19 @@ class Query extends \LessCompiler\Node {
             }
         }
 
-        return implode(" ", $representation);
+        $output = implode(" ", $representation);
+
+        return isset ($this->value["scope"]) ?
+            $this->value["scope"]->interpolate($output) : $output;
+    }
+
+    /**
+     * @param Scope $scope
+     * @return void
+     */
+    public function attachScope(Scope $scope)
+    {
+        $this->value["scope"] = $scope;
     }
 
 }

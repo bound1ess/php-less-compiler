@@ -80,13 +80,18 @@ class Compiler {
         // Set properties.
         $containerQuery = $container->getValue("query");
 
-        $newContainer = new Css\Container(
-            is_null($query) ? $containerQuery : $query->merge($containerQuery)
-        );
+        if ( ! is_null($query)) {
+            $containerQuery = $query->merge($containerQuery);
+        }
+
+        // Attach the scope.
+        $containerQuery->attachScope($scope);
+
+        $newContainer = new Css\Container($containerQuery);
 
         foreach ($container->getValue("properties") as $property) {
             $newContainer->addProperty(new Css\Property(
-                $property->getValue("name"),
+                $scope->interpolate($property->getValue("name")),
                 $scope->interpolate($property->getValue("value"))
             ));
         }

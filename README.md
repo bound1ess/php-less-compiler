@@ -53,6 +53,24 @@ CSS:
 }
 ```
 
+LESS:
+
+```less
+@someSelector: box;
+
+#@{someSelector} {
+    color-@someSelector: black;
+}
+```
+
+CSS:
+
+```css
+#box {
+    color-box: black;
+}
+```
+
 ## License
 
 The MIT license (MIT).
