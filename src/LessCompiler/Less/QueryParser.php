@@ -90,7 +90,7 @@ class QueryParser {
      */
     protected function insertSelectors(array $elements)
     {
-        $nameRegExp = "(?P<name>[A-Za-z0-9\-\_]+)";
+        $nameRegExp = "(?P<name>[@\{\}A-Za-z0-9\-\_]+)";
 
         $regExps = [
             "universal" => "/^\*$/",

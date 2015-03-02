@@ -71,7 +71,7 @@ class Parser {
     {
         $info = [];
 
-        if ( ! preg_match($ruleRegex = "/^(?P<query>.+)\{" . "$/", trim($line), $info)) {
+        if ( ! preg_match($ruleRegex = "/^(?P<query>.+)\s\{" . "$/", trim($line), $info)) {
             return null;
         }
 
