@@ -93,11 +93,14 @@ class Compiler {
 
         $containers[] = $newContainer;
 
-        // Nested.
+        // Nested rules.
         foreach ($container->getValue("children") as $children) {
             $containers = array_merge(
                 $containers,
-                $this->compileContainer($children, $container->getValue("query"))
+                $this->compileContainer(
+                    $children,
+                    is_null($query) ? $containerQuery : $query->merge($containerQuery)
+                )
             );
         }
 
