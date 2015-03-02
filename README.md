@@ -59,7 +59,7 @@ LESS:
 @someSelector: box;
 
 #@{someSelector} {
-    color-@someSelector: black;
+    color-@{someSelector}: black;
 }
 ```
 
