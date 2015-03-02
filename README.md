@@ -25,6 +25,30 @@ If you're interested in my work and want to contribute - you're welcome!
 - parent selector (&)
 - comments [x]
 
+##### Variables
+
+```less
+@foo: bar;
+
+#box > .item {
+    @baz: fizz;
+
+    input[type="text"] {
+        @foo: 123;
+
+        color: @foo;
+        font-size: @baz;
+    }
+}
+```
+
+```css
+#box > .item input[type="text"] {
+    color: 123;
+    font-size: fizz;
+}
+```
+
 ## License
 
 The MIT license (MIT).
