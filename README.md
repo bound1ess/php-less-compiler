@@ -4,10 +4,10 @@ Compile LESS into CSS with ease.
 
 ## Components
 
-- php-less-compiler/selector-parser
-- php-less-compiler/css-printer
-- php-less-compiler/scope-manager
-- ???
+- php-less-compiler/selector-parser [x]
+- php-less-compiler/css-printer [ ]
+- php-less-compiler/scope-manager [ ]
+- php-less-compiler/ruleset-parser [ ]
 
 ## LESS features support
 
