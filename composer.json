@@ -3,6 +3,10 @@
     "description": "Compile LESS into CSS.",
     "license": "MIT",
 
+    "require": {
+        "php-less-compiler/selector-parser": "~0.1"
+    },
+
     "require-dev": {
         "phpunit/phpunit": "~4.5",
         "bound1ess/essence": "~1.4",
