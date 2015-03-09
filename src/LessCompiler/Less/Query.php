@@ -1,7 +1,7 @@
 <?php namespace LessCompiler\Less;
 
 /**
- * A CSS query string.
+ * A CSS query string (selector).
  */
 class Query extends \LessCompiler\Css\Query {
 

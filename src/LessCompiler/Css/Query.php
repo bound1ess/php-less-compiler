@@ -1,9 +1,10 @@
 <?php namespace LessCompiler\Css;
 
-use LessCompiler\Compiler\Scope;
+use LessCompiler\Compiler\Scope,
+    PhpLessCompiler\SelectorParser\Printer;
 
 /**
- * A query string. Consists of Selectors and Combinators.
+ * A query string.
  */
 class Query extends \LessCompiler\Node {
 
@@ -15,25 +16,8 @@ class Query extends \LessCompiler\Node {
     {
         parent::__construct([
             "elements" => $elements,
+            "scope"    => null,
         ]);
-    }
-
-    /**
-     * @param \LessCompiler\Css\Selectors\Selector $selector
-     * @return void
-     */
-    public function addSelector(Selectors\Selector $selector)
-    {
-        $this->value["elements"][] = $selector;
-    }
-
-    /**
-     * @param \LessCompiler\Css\Combinators\Combinator $combinator
-     * @return void
-     */
-    public function addCombinator(Combinators\Combinator $combinator)
-    {
-        $this->value["elements"][] = $combinator;
     }
 
     /**
@@ -41,28 +25,9 @@ class Query extends \LessCompiler\Node {
      */
     public function represent()
     {
-        $representation = [];
+        $output = (new Printer)->_print($this->value["elements"]);
 
-        foreach ($this->value["elements"] as $element) {
-            // If that's a Selector, call represent().
-            if ($element instanceof Selectors\Selector) {
-                // If that's an AttributeSelector, append to the last element.
-                if ($element instanceof Selectors\AttributeSelector) {
-                    $representation[count($representation) - 1] .= $element->represent();
-
-                    continue;
-                }
-
-                $representation[] = $element->represent();
-            } else {
-                // That must be a Combinator.
-                $representation[] = $element->combine();
-            }
-        }
-
-        $output = implode(" ", $representation);
-
-        return isset ($this->value["scope"]) ?
+        return ! is_null($this->value["scope"]) ?
             $this->value["scope"]->interpolate($output) : $output;
     }
 
@@ -74,5 +39,4 @@ class Query extends \LessCompiler\Node {
     {
         $this->value["scope"] = $scope;
     }
-
 }
