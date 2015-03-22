@@ -7,6 +7,8 @@ $compiler = new PhpLessCompiler\Compiler;
 
 // Read all files in tests/ except for . and .. (dots).
 foreach (array_diff(scandir(__DIR__ . '/../tests'), ['.', '..']) as $test) {
+    echo $test;
+
     // Read the file.
     $test = file_get_contents(__DIR__ . '/../tests/' . $test);
 
@@ -14,10 +16,16 @@ foreach (array_diff(scandir(__DIR__ . '/../tests'), ['.', '..']) as $test) {
     list ($less, $css) = array_map('trim', preg_split('/=+/', $test));
 
     // Check.
-    // ...
+    $success = $compiler->compile($less) == $css;
 
     // Notify.
-    // ...
+    if ( ! $success) {
+        printf(' [FAILED] Expected "%s", got "%s".', $css, $compiler->compile($less));
+
+        echo PHP_EOL;
+    } else {
+        echo ' [OK]', PHP_EOL;
+    }
 }
 
 # vim: syntax=php
