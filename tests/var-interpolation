@@ -1,0 +1,14 @@
+@selector: .box;
+@file: main;
+@value: 10;
+@position: top;
+
+@import (less) "styles/@{file}.less";
+
+@{selector} {
+  padding-@position: @{value}px;
+}
+============
+.box {
+  padding-top: 10px;
+}

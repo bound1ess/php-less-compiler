@@ -1,0 +1,11 @@
+@value1: value2;
+
+a {
+  color: @@value1;
+}
+
+@value2: red;
+==================
+a {
+  color: red;
+}

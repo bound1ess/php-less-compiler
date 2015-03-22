@@ -1,0 +1,9 @@
+@link-color: red;
+
+a {
+  color: @link-color;
+}
+=====================
+a {
+  color: red;
+}

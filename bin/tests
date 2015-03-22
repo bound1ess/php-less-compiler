@@ -20,9 +20,15 @@ foreach (array_diff(scandir(__DIR__ . '/../tests'), ['.', '..']) as $test) {
 
     // Notify.
     if ( ! $success) {
-        printf(' [FAILED] Expected "%s", got "%s".', $css, $compiler->compile($less));
+        echo implode(PHP_EOL, [
+            ' [FAILED] Expected:',
+            $css,
+            'Got:',
+            $compiler->compile($less),
+            '',
+        ]);
 
-        echo PHP_EOL;
+        break;
     } else {
         echo ' [OK]', PHP_EOL;
     }
