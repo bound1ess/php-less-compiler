@@ -3,6 +3,8 @@
 
 require __DIR__ . '/../vendor/autoload.php';
 
+$compiler = new PhpLessCompiler\Compiler;
+
 // Read all files in tests/ except for . and .. (dots).
 foreach (array_diff(scandir(__DIR__ . '/../tests'), ['.', '..']) as $test) {
     // Read the file.
