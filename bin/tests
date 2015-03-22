@@ -9,7 +9,7 @@ foreach (array_diff(scandir(__DIR__ . '/../tests'), ['.', '..']) as $test) {
     $test = file_get_contents(__DIR__ . '/../tests/' . $test);
 
     // Split it into two parts - LESS code and respective CSS code.
-    // ...
+    list ($less, $css) = array_map('trim', preg_split('/=+/', $test));
 
     // Check.
     // ...
