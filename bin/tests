@@ -3,4 +3,19 @@
 
 require __DIR__ . '/../vendor/autoload.php';
 
+// Read all files in tests/ except for . and .. (dots).
+foreach (array_diff(scandir(__DIR__ . '/../tests'), ['.', '..']) as $test) {
+    // Read the file.
+    $test = file_get_contents(__DIR__ . '/../tests/' . $test);
+
+    // Split it into two parts - LESS code and respective CSS code.
+    // ...
+
+    // Check.
+    // ...
+
+    // Notify.
+    // ...
+}
+
 # vim: syntax=php
