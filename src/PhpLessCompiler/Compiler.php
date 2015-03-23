@@ -45,7 +45,34 @@ class Compiler {
      */
     public function compile($less)
     {
-        // @todo
-        return $less;
+        $tree = $this->parser->parse($less);
+
+        return $this->printCss($this->doCompile($tree));
+    }
+
+    /**
+     * @param array $nodes
+     * @return array
+     */
+    protected function doCompile(array $nodes)
+    {
+        return $nodes;
+    }
+
+    /**
+     * @param array $nodes
+     * @return string
+     */
+    protected function printCss(array $nodes)
+    {
+        $output = '';
+
+        foreach ($nodes as $node) {
+            $box = call_user_func_array('box', $node['nodes']);
+
+            $output .= $this->printer->doPrint($box->attach($node['selector']));
+        }
+
+        return $output;
     }
 }
