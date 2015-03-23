@@ -4,7 +4,6 @@
     "license": "MIT",
 
     "require": {
-        "php-less-compiler/selector-parser": "~0.1",
         "php-less-compiler/parser": "dev-master",
         "php-less-compiler/compiler": "dev-master",
         "php-less-compiler/css-printer": "dev-master"
