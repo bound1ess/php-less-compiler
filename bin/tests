@@ -7,7 +7,8 @@ $compiler = new PhpLessCompiler\Compiler;
 
 // Read all files in tests/ except for . and .. (dots).
 foreach (array_diff(scandir(__DIR__ . '/../tests'), ['.', '..']) as $test) {
-    echo $test;
+
+    printf('==> %s:', $test);
 
     // Read the file.
     $test = file_get_contents(__DIR__ . '/../tests/' . $test);
@@ -21,14 +22,13 @@ foreach (array_diff(scandir(__DIR__ . '/../tests'), ['.', '..']) as $test) {
     // Notify.
     if ( ! $success) {
         echo implode(PHP_EOL, [
-            ' [FAILED] Expected:',
+            ' [FAILED]',
+            '===== EXPECTED =====',
             $css,
-            'Got:',
+            '===== ACTUAL =====',
             $compiler->compile($less),
             '',
         ]);
-
-        break;
     } else {
         echo ' [OK]', PHP_EOL;
     }

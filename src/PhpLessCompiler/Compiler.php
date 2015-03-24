@@ -128,7 +128,7 @@ class Compiler {
      */
     protected function printCss(array $nodes)
     {
-        $output = '';
+        $output = [];
 
         foreach ($nodes as $selector => $declarations) {
 
@@ -143,9 +143,9 @@ class Compiler {
 
             $box = call_user_func_array('box', $declarations);
 
-            $output .= $this->printer->doPrint($box->attach($selector));
+            $output[] = $this->printer->doPrint($box->attach($selector));
         }
 
-        return $output;
+        return implode(PHP_EOL . PHP_EOL, $output);
     }
 }
