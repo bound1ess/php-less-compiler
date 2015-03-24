@@ -1,0 +1,11 @@
+// Comment.
+a, .link { // Here it is.
+    /* Something
+       not very useful.
+     */
+    color: white; // Foobar.
+} // Hello!
+============================
+a, .link {
+  color: white;
+}
