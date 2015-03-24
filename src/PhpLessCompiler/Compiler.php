@@ -73,7 +73,7 @@ class Compiler {
             // @todo
 
             if (is_array($node)) {
-                $scope = $this->scopeManager->getOrCreate($node['selector']);
+                $scope = $this->findScope($node['selector']);
 
                 $this->setVars($scope, $node['nodes']);
 
@@ -120,6 +120,28 @@ class Compiler {
     protected function isVar($node)
     {
         return is_object($node) and ($node instanceof VarStatement);
+    }
+
+    /**
+     * @param string $selector
+     * @return Scope
+     */
+    protected function findScope($selector)
+    {
+        $parent = 'global';
+
+        foreach ($this->scopeManager->scopes() as $scope) {
+
+            if (strpos($selector, $scope->id()) === 0) {
+                $parent = $scope->id();
+
+                break;
+            }
+        }
+
+        var_dump("$parent ==> $selector");
+
+        return $this->scopeManager->create($selector, $parent);
     }
 
     /**
