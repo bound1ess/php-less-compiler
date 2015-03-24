@@ -45,6 +45,8 @@ class Compiler {
      */
     public function compile($less)
     {
+        $this->scopeManager->clean();
+
         $tree = $this->parser->parse($less);
 
         return $this->printCss($this->doCompile($tree));
@@ -56,7 +58,27 @@ class Compiler {
      */
     protected function doCompile(array $nodes)
     {
-        return $nodes;
+        $new = [];
+
+        foreach ($nodes as $node) {
+            // Add a variable to "global" scope.
+            if ($node instanceof VarStatement) {
+                $var = $node->get();
+
+                $this->scopeManager->get('global')->set($var['name'], $var['value']);
+            }
+
+            // Handle imports.
+            // @todo
+
+            if (is_array($node)) {
+                foreach ($node['nodes'] as $element) {
+                    $element->apply($this->scopeManager->getOrCreate($node['selector']));
+                }
+            }
+        }
+
+        return $new;
     }
 
     /**
@@ -68,7 +90,18 @@ class Compiler {
         $output = '';
 
         foreach ($nodes as $node) {
-            $box = call_user_func_array('box', $node['nodes']);
+            $declarations = [];
+
+            foreach ($node['nodes'] as $declaration) {
+                $declaration = $declaration->get();
+
+                $declarations[] = declaration(
+                    property($declaration['property']),
+                    value($declaration['value'])
+                );
+            }
+
+            $box = call_user_func_array('box', $declarations);
 
             $output .= $this->printer->doPrint($box->attach($node['selector']));
         }
