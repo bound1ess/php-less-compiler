@@ -73,7 +73,14 @@ class Compiler {
 
             if (is_array($node)) {
                 foreach ($node['nodes'] as $element) {
-                    $element->apply($this->scopeManager->getOrCreate($node['selector']));
+                    // Handle everything else.
+                    // @todo
+                    if ($element instanceof DeclarationStatement) {
+                        $scope = $this->scopeManager->getOrCreate($node['selector']);
+                        $new[$node['selector']][] = $element;
+
+                        $element->apply($scope);
+                    }
                 }
             }
         }
@@ -89,13 +96,12 @@ class Compiler {
     {
         $output = '';
 
-        foreach ($nodes as $node) {
-            $declarations = [];
+        foreach ($nodes as $selector => $declarations) {
 
-            foreach ($node['nodes'] as $declaration) {
+            foreach ($declarations as $index => $declaration) {
                 $declaration = $declaration->get();
 
-                $declarations[] = declaration(
+                $declarations[$index] = declaration(
                     property($declaration['property']),
                     value($declaration['value'])
                 );
@@ -103,7 +109,7 @@ class Compiler {
 
             $box = call_user_func_array('box', $declarations);
 
-            $output .= $this->printer->doPrint($box->attach($node['selector']));
+            $output .= $this->printer->doPrint($box->attach($selector));
         }
 
         return $output;
