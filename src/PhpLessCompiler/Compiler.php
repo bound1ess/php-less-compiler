@@ -5,7 +5,8 @@ use PhpLessCompiler\Parser\Parser,
     PhpLessCompiler\Parser\Statements\VarStatement,
     PhpLessCompiler\Parser\Statements\ImportStatement;
 
-use PhpLessCompiler\Compiler\ScopeManager;
+use PhpLessCompiler\Compiler\ScopeManager,
+    PhpLessCompiler\Compiler\Scope;
 
 use PhpLessCompiler\CssPrinter\Printer,
     PhpLessCompiler\CssPrinter\Printers\Printer as PrinterContract;
@@ -60,23 +61,32 @@ class Compiler {
     {
         $new = [];
 
-        foreach ($nodes as $node) {
-            // Add a variable to "global" scope.
-            if ($node instanceof VarStatement) {
-                $var = $node->get();
+        $this->setVars($this->scopeManager->get('global'), $nodes);
 
-                $this->scopeManager->get('global')->set($var['name'], $var['value']);
+        foreach ($nodes as $node) {
+
+            if ($this->isVar($node)) {
+                continue;
             }
 
             // Handle imports.
             // @todo
 
             if (is_array($node)) {
+                $scope = $this->scopeManager->getOrCreate($node['selector']);
+
+                $this->setVars($scope, $node['nodes']);
+
                 foreach ($node['nodes'] as $element) {
+
+                    if ($this->isVar($element)) {
+                        continue;
+                    }
+
                     // Handle everything else.
                     // @todo
+
                     if ($element instanceof DeclarationStatement) {
-                        $scope = $this->scopeManager->getOrCreate($node['selector']);
                         $new[$scope->interpolate($node['selector'])][] = $element;
 
                         $element->apply($scope);
@@ -86,6 +96,30 @@ class Compiler {
         }
 
         return $new;
+    }
+
+    /**
+     * @param Scope $scope
+     * @param array $nodes
+     * @return void
+     */
+    protected function setVars(Scope $scope, array $nodes)
+    {
+        foreach ($nodes as $node) {
+
+            if ($this->isVar($node)) {
+                $scope->set($node->get()['name'], $node->get()['value']);
+            }
+        }
+    }
+
+    /**
+     * @param array|object $node
+     * @return bool
+     */
+    protected function isVar($node)
+    {
+        return is_object($node) and ($node instanceof VarStatement);
     }
 
     /**
