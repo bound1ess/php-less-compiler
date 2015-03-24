@@ -77,7 +77,7 @@ class Compiler {
                     // @todo
                     if ($element instanceof DeclarationStatement) {
                         $scope = $this->scopeManager->getOrCreate($node['selector']);
-                        $new[$node['selector']][] = $element;
+                        $new[$scope->interpolate($node['selector'])][] = $element;
 
                         $element->apply($scope);
                     }
