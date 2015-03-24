@@ -139,8 +139,6 @@ class Compiler {
             }
         }
 
-        var_dump("$parent ==> $selector");
-
         return $this->scopeManager->create($selector, $parent);
     }
 
