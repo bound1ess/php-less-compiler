@@ -170,7 +170,7 @@ class Compiler {
                 return sprintf('@import "%s";', $src);
 
             case 'inline':
-                return file_get_contents($fullPath);
+                return trim(file_get_contents($fullPath));
 
             default:
                 throw new Exceptions\NotSupportedException("Import mode #{$mode}");
@@ -214,7 +214,13 @@ class Compiler {
             }
 
             foreach ($declarations as $index => $declaration) {
-                //var_dump($declaration);
+
+                if (is_string($declaration)) {
+                    $declarations[$index] = literal($declaration);
+
+                    continue;
+                }
+
                 $declaration = $declaration->get();
 
                 $declarations[$index] = declaration(
