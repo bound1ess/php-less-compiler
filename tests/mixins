@@ -1,0 +1,24 @@
+.usual-mixin() {
+    &:hover {
+        color: red;
+    }
+}
+
+.params-mixin(@size, @padding) {
+    font-size: @size;
+    padding: @padding;
+}
+
+a {
+    .usual-mixin;
+    .params-mixin(20px, 10px 10px 10px 10px);
+}
+==============================================
+a:hover {
+  color: red;
+}
+
+a {
+  font-size: 20px;
+  padding: 10px 10px 10px 10px;
+}
