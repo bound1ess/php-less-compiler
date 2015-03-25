@@ -29,15 +29,23 @@ class Compiler {
     protected $printer;
 
     /**
+     * @var string
+     */
+    protected $root;
+
+    /**
+     * @param string|null $root
      * @return Compiler
      */
-    public function __construct()
+    public function __construct($root = null)
     {
         $this->parser = new Parser;
 
         $this->scopeManager = new ScopeManager;
 
         $this->printer = Printer::make('default');
+
+        $this->root = $root ?: getcwd();
     }
 
     /**
@@ -139,7 +147,31 @@ class Compiler {
      */
     protected function handleImport(ImportStatement $import)
     {
-        // ...
+        $src = $import->get()['src'];
+        $mode = $import->get()['mode'];
+
+        $fullPath = $this->root . '/' . $src;
+
+        // file ==> file.less if mode is set to "less"
+        // but file.less ==> file.less, no changes
+        if (strpos($fullPath, '.' . $mode) === false) {
+            $fullPath .= '.' . $mode;
+        }
+
+        switch ($mode) {
+
+            case 'less':
+                return $this->compile(file_get_contents($fullPath));
+
+            case 'css':
+                return sprintf('@import "%s";', $src);
+
+            case 'inline':
+                return file_get_contents($fullPath);
+
+            default:
+                throw new Exceptions\NotSupportedException("Import mode #{$mode}");
+        }
     }
 
     /**
