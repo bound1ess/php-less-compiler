@@ -21,7 +21,7 @@ If you're interested in my work and want to contribute - you're welcome!
 - variables (scopes, interpolating) [x]
 - mixins (selectors, namespaces, parametric) [ ]
 - nested rules [x]
-- importing [ ]
+- importing [x]
 - parent selector (&) [x]
 - comments [x]
 

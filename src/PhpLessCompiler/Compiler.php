@@ -69,8 +69,9 @@ class Compiler {
                 continue;
             }
 
-            // Handle imports.
-            // @todo
+            if ($this->isImport($node)) {
+                $this->handleImport($node);
+            }
 
             if (is_array($node)) {
                 $scope = $this->findScope($node['selector']);
@@ -83,8 +84,9 @@ class Compiler {
                         continue;
                     }
 
-                    // Handle everything else.
-                    // @todo
+                    if ($this->isImport($node)) {
+                        $this->handleImport($node);
+                    }
 
                     if ($element instanceof DeclarationStatement) {
                         $new[$scope->interpolate($node['selector'])][] = $element;
@@ -120,6 +122,24 @@ class Compiler {
     protected function isVar($node)
     {
         return is_object($node) and ($node instanceof VarStatement);
+    }
+
+    /**
+     * @param array|object $node
+     * @return bool
+     */
+    protected function isImport($node)
+    {
+        return is_object($node) and ($node instanceof ImportStatement);
+    }
+
+    /**
+     * @param ImportStatement $import
+     * @return string
+     */
+    protected function handleImport(ImportStatement $import)
+    {
+        // ...
     }
 
     /**
