@@ -4,6 +4,9 @@
 require __DIR__ . '/../vendor/autoload.php';
 
 $compiler = new PhpLessCompiler\Compiler;
+$parser = new PhpLessCompiler\Parser\Parser;
+
+$verbose = (count($argv) > 1 and $argv[1] == 'verbose');
 
 // Read all files in tests/ except for . and .. (dots).
 foreach (array_diff(scandir(__DIR__ . '/../tests'), ['.', '..']) as $test) {
@@ -29,6 +32,11 @@ foreach (array_diff(scandir(__DIR__ . '/../tests'), ['.', '..']) as $test) {
             $compiler->compile($less),
             '',
         ]);
+
+        if ($verbose) {
+            var_dump($parser->parse($less));
+        }
+
     } else {
         echo ' [OK]', PHP_EOL;
     }

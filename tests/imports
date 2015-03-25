@@ -5,7 +5,7 @@ a {
     @import (inline) "include/inline.css";
 }
 
-@import "include/main.less";
+@import "include/main";
 ============================
 @import "include/main.css";
 

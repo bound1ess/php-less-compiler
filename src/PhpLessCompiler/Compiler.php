@@ -93,8 +93,8 @@ class Compiler {
                         continue;
                     }
 
-                    if ($this->isImport($node)) {
-                        $new[$selector][] = $this->handleImport($node);
+                    if ($this->isImport($element)) {
+                        $new[$selector][] = $this->handleImport($element);
 
                         continue;
                     }
@@ -157,7 +157,7 @@ class Compiler {
 
         // file ==> file.less if mode is set to "less"
         // but file.less ==> file.less, no changes
-        if (strpos($fullPath, '.' . $mode) === false) {
+        if (in_array($mode, ['less', 'css']) and strpos($fullPath, '.' . $mode) === false) {
             $fullPath .= '.' . $mode;
         }
 
@@ -207,11 +207,14 @@ class Compiler {
 
         foreach ($nodes as $selector => $declarations) {
 
-            if (is_string($declarations)) {
-                var_dump($declarations);exit;
+            if (is_int($selector)) {
+                $output[] = $declarations;
+
+                continue;
             }
 
             foreach ($declarations as $index => $declaration) {
+                //var_dump($declaration);
                 $declaration = $declaration->get();
 
                 $declarations[$index] = declaration(
