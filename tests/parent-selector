@@ -1,0 +1,15 @@
+a {
+    color: blue;
+
+    &:hover {
+        color: green;
+    }
+}
+=====================
+a {
+  color: blue;
+}
+
+a:hover {
+  color: green;
+}

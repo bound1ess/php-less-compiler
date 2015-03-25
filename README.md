@@ -18,12 +18,12 @@ If you're interested in my work and want to contribute - you're welcome!
 
 ### What is supported
 
-- variables (scopes, interpolating) [ ]
+- variables (scopes, interpolating) [x]
 - mixins (selectors, namespaces, parametric) [ ]
-- nested rules [ ]
+- nested rules [x]
 - importing [ ]
-- parent selector (&) [ ]
-- comments [ ]
+- parent selector (&) [x]
+- comments [x]
 
 ## License
 
