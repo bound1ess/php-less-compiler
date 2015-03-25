@@ -1,0 +1,16 @@
+#!/usr/bin/env php
+<?php
+
+require __DIR__ . '/../vendor/autoload.php';
+
+$compiler = new PhpLessCompiler\Compiler;
+
+$code = '';
+
+while (($line = readline()) != 'compile') {
+    $code .= $line . PHP_EOL;
+}
+
+echo '==> Compiling...', PHP_EOL, $compiler->compile($code), PHP_EOL;
+
+# vim: syntax=php
