@@ -78,11 +78,12 @@ class Compiler {
             }
 
             if ($this->isImport($node)) {
-                $this->handleImport($node);
+                $new[] = $this->handleImport($node);
             }
 
             if (is_array($node)) {
                 $scope = $this->findScope($node['selector']);
+                $selector = $scope->interpolate($node['selector']);
 
                 $this->setVars($scope, $node['nodes']);
 
@@ -93,11 +94,13 @@ class Compiler {
                     }
 
                     if ($this->isImport($node)) {
-                        $this->handleImport($node);
+                        $new[$selector][] = $this->handleImport($node);
+
+                        continue;
                     }
 
                     if ($element instanceof DeclarationStatement) {
-                        $new[$scope->interpolate($node['selector'])][] = $element;
+                        $new[$selector][] = $element;
 
                         $element->apply($scope);
                     }
@@ -203,6 +206,10 @@ class Compiler {
         $output = [];
 
         foreach ($nodes as $selector => $declarations) {
+
+            if (is_string($declarations)) {
+                var_dump($declarations);exit;
+            }
 
             foreach ($declarations as $index => $declaration) {
                 $declaration = $declaration->get();
