@@ -1,1 +1,19 @@
-@import "foo.less"
+@import "include/main.css";
+
+a {
+    color: green;
+    @import (inline) "include/inline.css";
+}
+
+@import "include/main.less";
+============================
+@import "include/main.css";
+
+a {
+  color: green;
+  font-size: 20px;
+}
+
+a:hover {
+  color: blue;
+}

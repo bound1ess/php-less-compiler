@@ -3,12 +3,12 @@
 @value: 10;
 @position: top;
 
-@import (less) "styles/@{file}.less";
-
 @{selector} {
   padding-@position: @{value}px;
+  background: url("images/@{file}.png");
 }
 ============
 .box {
   padding-top: 10px;
+  background: url("images/main.png");
 }
