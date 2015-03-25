@@ -1,0 +1,13 @@
+@size: 20px;
+
+#box {
+    @size: 30px;
+
+    .item {
+        font-size: @size;
+    }
+}
+=========================
+#box .item {
+  font-size: 30px;
+}
