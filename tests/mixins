@@ -9,19 +9,19 @@
 
 @value: 20px;
 
-a:hover {
-    .usual-mixin;
-}
-
 a {
     .params-mixin(@value, 10px 10px 10px 10px);
+
+    &:hover {
+        .usual-mixin;
+    }
 }
 ==============================================
-a:hover {
-  color: red;
-}
-
 a {
   font-size: 20px;
   padding: 10px 10px 10px 10px;
+}
+
+a:hover {
+  color: red;
 }
