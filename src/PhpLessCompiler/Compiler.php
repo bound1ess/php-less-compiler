@@ -91,7 +91,7 @@ class Compiler {
 
             if (is_array($node)) {
 
-                if ( ! $this->isParametric($node['selector'])) {
+                if ( ! array_key_exists('is_mixin', $node)) {
 
                     $scope = $this->findScope($selector = $node['selector']);
                     $selector = $scope->interpolate($selector);
@@ -112,7 +112,16 @@ class Compiler {
                     }
 
                     if ($element instanceof MixinStatement) {
-                        var_dump($this->mixins); exit;
+
+                        if ( ! array_key_exists($selector, $new)) {
+                            $new[$selector] = [];
+                        }
+
+                        $new[$selector] = $this->handleMixin(
+                            $element, $new[$selector], $scope
+                        );
+
+                        continue;
                     }
 
                     if ($this->isImport($element)) {
@@ -167,15 +176,6 @@ class Compiler {
     }
 
     /**
-     * @param string $mixin
-     * @return bool
-     */
-    protected function isParametric($mixin)
-    {
-        return strpos($mixin, '(') !== false and strpos($mixin, ')') !== false;
-    }
-
-    /**
      * @param ImportStatement $import
      * @return string
      */
@@ -226,6 +226,53 @@ class Compiler {
         }
 
         return $this->scopeManager->create($selector, $parent);
+    }
+
+    /**
+     * @param MixinStatement $mixin
+     * @param array $nodes
+     * @param Scope $scope
+     * @return array
+     */
+    protected function handleMixin(MixinStatement $mixin, array $nodes, Scope $scope)
+    {
+        // Find the requested mixin.
+        $requested = null;
+
+        foreach ($this->mixins as $someMixin) {
+            if (strpos($someMixin['selector'], $name = $mixin->get()['name']) === 0) {
+                $requested = $someMixin;
+
+                break;
+            }
+        }
+
+        // Couldn't find it.
+        if (is_null($requested)) {
+            throw new Exceptions\UndefinedMixinException($name);
+        }
+
+        // Create a dedicated scope for the requested mixin.
+        $isolatedScope = new Scope($name);
+        $args = $mixin->get()['args'];
+
+        foreach ($someMixin['args'] as $position => $arg) {
+
+            $isolatedScope->set(
+                str_replace('@', '', $arg),
+                $scope->interpolate($args[$position])
+            );
+        }
+
+        // Apply it.
+        foreach ($someMixin['nodes'] as $node) {
+            $nodes[] = $node;
+
+            $node->apply($isolatedScope);
+        }
+
+        // Done.
+        return $nodes;
     }
 
     /**
