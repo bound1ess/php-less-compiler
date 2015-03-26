@@ -3,7 +3,8 @@
 use PhpLessCompiler\Parser\Parser,
     PhpLessCompiler\Parser\Statements\DeclarationStatement,
     PhpLessCompiler\Parser\Statements\VarStatement,
-    PhpLessCompiler\Parser\Statements\ImportStatement;
+    PhpLessCompiler\Parser\Statements\ImportStatement,
+    PhpLessCompiler\Parser\Statements\MixinStatement;
 
 use PhpLessCompiler\Compiler\ScopeManager,
     PhpLessCompiler\Compiler\Scope;
@@ -34,6 +35,11 @@ class Compiler {
     protected $root;
 
     /**
+     * @var array
+     */
+    protected $mixins = [];
+
+    /**
      * @param string|null $root
      * @return Compiler
      */
@@ -55,6 +61,8 @@ class Compiler {
     public function compile($less)
     {
         $this->scopeManager->clean();
+
+        $this->mixins = [];
 
         $tree = $this->parser->parse($less);
 
@@ -82,8 +90,18 @@ class Compiler {
             }
 
             if (is_array($node)) {
-                $scope = $this->findScope($node['selector']);
-                $selector = $scope->interpolate($node['selector']);
+
+                if ( ! $this->isParametric($node['selector'])) {
+
+                    $scope = $this->findScope($selector = $node['selector']);
+                    $selector = $scope->interpolate($selector);
+
+                } else {
+                    // That's a mixin.
+                    $this->mixins[] = $node;
+
+                    continue;
+                }
 
                 $this->setVars($scope, $node['nodes']);
 
@@ -91,6 +109,10 @@ class Compiler {
 
                     if ($this->isVar($element)) {
                         continue;
+                    }
+
+                    if ($element instanceof MixinStatement) {
+                        var_dump($this->mixins); exit;
                     }
 
                     if ($this->isImport($element)) {
@@ -142,6 +164,15 @@ class Compiler {
     protected function isImport($node)
     {
         return is_object($node) and ($node instanceof ImportStatement);
+    }
+
+    /**
+     * @param string $mixin
+     * @return bool
+     */
+    protected function isParametric($mixin)
+    {
+        return strpos($mixin, '(') !== false and strpos($mixin, ')') !== false;
     }
 
     /**
