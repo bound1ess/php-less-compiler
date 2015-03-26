@@ -1,7 +1,5 @@
 .usual-mixin() {
-    &:hover {
-        color: red;
-    }
+    color: red;
 }
 
 .params-mixin(@size, @padding) {
@@ -9,9 +7,14 @@
     padding: @padding;
 }
 
-a {
+@value: 20px;
+
+a:hover {
     .usual-mixin;
-    .params-mixin(20px, 10px 10px 10px 10px);
+}
+
+a {
+    .params-mixin(@value, 10px 10px 10px 10px);
 }
 ==============================================
 a:hover {
