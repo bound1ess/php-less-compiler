@@ -1,4 +1,4 @@
-# PHP LESS compiler
+# PHP LESS compiler [development]
 
 Compile LESS into CSS with ease.
 

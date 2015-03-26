@@ -4,9 +4,9 @@
     "license": "MIT",
 
     "require": {
-        "php-less-compiler/parser": "dev-master",
-        "php-less-compiler/compiler": "dev-master",
-        "php-less-compiler/css-printer": "dev-master"
+        "php-less-compiler/parser": "~0",
+        "php-less-compiler/compiler": "~0",
+        "php-less-compiler/css-printer": "~0"
     },
 
     "autoload": {
